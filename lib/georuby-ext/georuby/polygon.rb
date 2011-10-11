@@ -12,18 +12,6 @@ class GeoRuby::SimpleFeatures::Polygon
     from_coordinates [coordinates]
   end
 
-  def inspect
-    "#<#{self.class}:#{object_id} #{as_ewkt}>"
-  end
-
-  # def inspect
-  #   "[" + rings.collect do |ring|
-  #     "[" + ring.points.collect do |point|
-  #       "[#{point.x},#{point.y}]"
-  #     end.join(',') + "]"
-  #   end.join(',') + "]"
-  # end
-
   def side_count
     # Reduce by one because polygon is closed
     (rings.collect(&:size).sum) - 1
