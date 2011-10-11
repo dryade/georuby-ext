@@ -4,11 +4,11 @@ $:.push File.expand_path("../lib", __FILE__)
 Gem::Specification.new do |s|
   s.name        = "georuby-ext"
   s.version     = "0.0.1"
-  s.authors     = ["Alban Peignier"]
-  s.email       = ["alban.peignier@dryade.net"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.authors     = ["Marc Florisson", "Luc Donnet", "Alban Peignier"]
+  s.email       = ["marc@dryade.net", "luc@dryade.net", "alban@dryade.net"]
+  s.homepage    = "http://github.com/dryade/georuby-ext"
+  s.summary     = %q{Extension to Ruby geometry libraries}
+  s.description = %q{Use together GeoRuby, rgeo, geokit, proj4j (and others)}
 
   s.rubyforge_project = "georuby-ext"
 
