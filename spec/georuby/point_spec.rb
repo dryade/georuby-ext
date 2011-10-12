@@ -78,36 +78,6 @@ describe GeoRuby::SimpleFeatures::Point do
     
   end
 
-  describe "#to_wgs84" do
-
-    let(:projected_point) { mock }
-
-    it "should return a point with 4326 srid" do
-      subject.to_wgs84.srid.should == 4326
-    end
-
-    it "should project the point in wgs84" do
-      subject.should_receive(:project).with(4326).and_return(projected_point)
-      subject.to_wgs84.should == projected_point
-    end
-
-  end
-
-  describe "#to_google" do
-
-    let(:projected_point) { mock }
-
-    it "should return a point with 900913 srid" do
-      subject.to_google.srid.should == 900913
-    end
-
-    it "should project the point in google" do
-      subject.should_receive(:project).with(900913).and_return(projected_point)
-      subject.to_google.should == projected_point
-    end
-
-  end
-
   describe "#to_proj4" do
     
     it "should return a Proj4::Point" do
@@ -213,22 +183,22 @@ describe GeoRuby::SimpleFeatures::Point do
 
   end
 
-  describe "#project" do
+  describe "#project_to" do
 
     let(:tour_eiffel_in_wgs84) { point 48.8580,2.2946,4326 }
     let(:tour_eiffel_in_google) { point 5438847.68117776, 255502.011303386, 900913 }
 
     it "should return the Point when the target srid is the same" do
-      subject.project(subject.srid).should == subject
+      subject.project_to(subject.srid).should == subject
     end
 
     it "should return a Point with the target srid" do
-      subject.project(900913).srid.should == 900913
+      subject.project_to(900913).srid.should == 900913
     end
 
     it "should return a Point projected into the target srid" do
-      tour_eiffel_in_google.project(tour_eiffel_in_wgs84.srid).should == tour_eiffel_in_wgs84
-      tour_eiffel_in_wgs84.project(tour_eiffel_in_google.srid).should == tour_eiffel_in_google
+      tour_eiffel_in_google.project_to(tour_eiffel_in_wgs84.srid).should == tour_eiffel_in_wgs84
+      tour_eiffel_in_wgs84.project_to(tour_eiffel_in_google.srid).should == tour_eiffel_in_google
     end
 
   end
@@ -245,20 +215,6 @@ describe GeoRuby::SimpleFeatures::Point do
       bounds = GeoRuby::SimpleFeatures::Point.bounds(points('0 0,1 1,1 0,0 1'))
       bounds.lower_corner.should == point(0,0)
       bounds.upper_corner.should == point(1,1)
-    end
-
-  end
-
-  describe ".srid!" do
-    
-    it "should return the uniq srid of given points" do
-      GeoRuby::SimpleFeatures::Point.srid!([point.to_google]).should == 900913
-    end
-
-    it "should raise an error when srid is not uniq" do
-      lambda do
-        GeoRuby::SimpleFeatures::Point.srid!([point, point.to_google])
-      end.should raise_error
     end
 
   end

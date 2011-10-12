@@ -10,4 +10,18 @@ class GeoRuby::SimpleFeatures::Geometry
     srid == 4326
   end
 
+  def to_wgs84
+    project_to 4326
+  end
+
+  def to_google
+    project_to 900913
+  end
+
+  def self.srid!(geometries)
+    geometries.first.srid.tap do |srid|
+      raise "SRIDs are not uniq in #{geometries.inspect}" if geometries.any? { |geometry| geometry.srid != srid }
+    end unless geometries.blank?
+  end
+
 end

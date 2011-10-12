@@ -60,19 +60,11 @@ class GeoRuby::SimpleFeatures::Point
     Geokit::LatLng.new y, x
   end
 
-  def to_wgs84
-    project 4326
-  end
-
-  def to_google
-    project 900913
-  end
-
   def projection
     Proj4::Projection.for_srid srid
   end
   
-  def project(target_srid)
+  def project_to(target_srid)
     return self if srid == target_srid
 
     self.class.from_pro4j projection.transform(Proj4::Projection.for_srid(target_srid), to_proj4), target_srid
@@ -108,12 +100,6 @@ class GeoRuby::SimpleFeatures::Point
     points.inject(points.first.envelope) do |envelope, point|
       envelope.extend!(point.envelope)
     end
-  end
-
-  def self.srid!(points)
-    points.first.srid.tap do |srid|
-      raise "SRIDs are not uniq in #{points.inspect}" if points.any? { |point| point.srid != srid }
-    end unless points.blank?
   end
 
 end

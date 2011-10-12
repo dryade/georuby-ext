@@ -12,18 +12,15 @@ class GeoRuby::SimpleFeatures::LineString
     change :points => points.reverse
   end
 
-  def to_wgs84
-    change :points => points.map(&:to_wgs84), :srid => 4326
-  end
-
-  def to_google
-    change :points => points.map(&:to_google), :srid => 900913
+  def project_to(target_srid)
+    return self if srid == target_srid
+    change :points => points.map { |point| point.project_to(target_srid) }, :srid => target_srid
   end
 
   def self.merge(lines)
     merged_points = lines.map(&:points).flatten.uniq
     if merged_points.size > 1
-      from_points merged_points, lines.first.srid, lines.first.with_z, lines.first.with_m
+      from_points merged_points, srid!(lines), lines.first.with_z, lines.first.with_m
     end
   end
   

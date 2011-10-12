@@ -93,18 +93,19 @@ describe GeoRuby::SimpleFeatures::LineString do
 
   end
 
-  describe "#to_wgs84" do
+  describe "#project_to" do
 
-    subject { line_string("0 0,1 1,0 0").to_google }
+    let(:target_srid) { 900913 }
+    subject { line_string("0 0,1 1,0 0") }
 
     it "should project all points into wgs84" do
-      subject.to_wgs84.points.each_with_index do |wgs84_point, index|
-        wgs84_point.should == subject[index].to_wgs84
+      subject.project_to(target_srid).points.each_with_index do |point, index|
+        point.should == subject[index].project_to(target_srid)
       end
     end
 
-    it "should have the srid 4326" do
-      subject.to_wgs84.srid.should == 4326
+    it "should have the target srid" do
+      subject.project_to(target_srid).srid.should == target_srid
     end
 
     it "should not change other attributes" do
