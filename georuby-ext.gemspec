@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "guard"
   s.add_development_dependency "rcov"
 
-  s.add_runtime_dependency "GeoRuby"
+  s.add_runtime_dependency "georuby"
   s.add_runtime_dependency "geokit"
   s.add_runtime_dependency "rgeo"
   s.add_runtime_dependency "proj4rb"
