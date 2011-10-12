@@ -73,6 +73,11 @@ describe GeoRuby::SimpleFeatures::Point do
     it "should return centroid of given points" do
       centroid("0 0,0 2,2 2,2 0").should == point(1,1)
     end
+
+    it "should have the same srid than points" do
+      google_point = point.to_google
+      centroid([google_point]).srid.should == google_point.srid
+    end
     
   end
 
@@ -84,6 +89,18 @@ describe GeoRuby::SimpleFeatures::Point do
 
     it "should return the same location in wgs84 srid" do
       tour_eiffel_in_google.to_wgs84.should == tour_eiffel_in_wgs84
+    end
+
+  end
+
+  describe "#to_google" do
+
+    it "should return a point with 900913 srid" do
+      subject.to_google.srid.should == 900913
+    end
+
+    it "should return the same location in google srid" do
+      tour_eiffel_in_google.to_google.should == tour_eiffel_in_wgs84
     end
 
   end
@@ -136,6 +153,40 @@ describe GeoRuby::SimpleFeatures::Point do
 
     it "should have the specified srid" do
       from_pro4j(proj4_point, srid).srid.should == srid
+    end
+    
+  end
+
+  it "should be used as Hash key" do
+    hash = { point(0,0) => :found }
+    hash[point(0,0)].should == :found
+  end
+
+  describe "#eql?" do
+    
+    it "should compare x, y, z and srid" do
+      point(0,0).should eq(point(0,0))
+    end
+
+  end
+
+  describe "hash" do
+
+    it "should use x, y, z and srid" do
+      point(0,0).hash.should == point(0,0).hash
+    end
+    
+  end
+
+  describe "#bounding_box" do
+
+    it "should be itself twice" do
+      subject.bounding_box.should == [subject, subject]
+    end
+
+    it "should return 3 points with_z" do
+      subject.with_z = true
+      subject.bounding_box.should == [subject] * 3
     end
     
   end

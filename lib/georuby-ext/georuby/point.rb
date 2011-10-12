@@ -22,9 +22,8 @@ class GeoRuby::SimpleFeatures::Point
   end
 
   def hash
-    [x,y,srid].hash
+    [x,y,z,srid].hash
   end
-
 
   def to_s
     "#{y},#{x}"
@@ -37,12 +36,10 @@ class GeoRuby::SimpleFeatures::Point
     when 1
       points.first
     when 2
-      return GeoRuby::SimpleFeatures::Point.from_x_y points.sum(&:x) / 2, points.sum(&:y) / 2, points.first.srid
+      from_x_y points.sum(&:x) / 2, points.sum(&:y) / 2, points.first.srid
     else
-      points = [points.last, *points]
-      GeoRuby::SimpleFeatures::Polygon.from_points([points]).centroid.tap do |centroid|
-        centroid.srid = points.first.srid if centroid
-      end
+      points = [points.last, *points] # polygon must be closed for rgeo
+      GeoRuby::SimpleFeatures::Polygon.from_points([points], points.first.srid).centroid
     end
   end
 
@@ -96,6 +93,10 @@ class GeoRuby::SimpleFeatures::Point
 
   def to_openlayers
     OpenLayers::LonLat.new x, y
+  end
+
+  def bounding_box
+    [dup] * (with_z ? 3 : 2)
   end
 
   def self.bounds(points)
