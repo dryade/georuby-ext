@@ -10,16 +10,8 @@ describe RGeo::Geos::PointImpl do
       subject.to_georuby.should be_instance_of(GeoRuby::SimpleFeatures::Point)
     end
 
-    it "should have the same x" do
-      subject.to_georuby.x.should == subject.x
-    end
-
-    it "should have the same y" do
-      subject.to_georuby.y.should == subject.y
-    end
-
-    it "should have the same srid" do
-      subject.to_georuby.srid.should == subject.srid
+    it "should have the same x, y and srid" do
+      subject.to_georuby.should have_same(:x, :y, :srid).than(subject)
     end
 
   end

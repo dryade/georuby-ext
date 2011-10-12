@@ -17,17 +17,4 @@ describe GeoRuby::SimpleFeatures::LinearRing do
 
   end
   
-  describe "#to_wgs84" do
-    let(:line) {linear_ring(point(0,0), point(1,1), point(0,0))}
-    let(:line_wgs84) {    GeoRuby::SimpleFeatures::LinearRing.from_points([point(0,0,4326), point(0.000008983152841195214, 0.000008983152840993819,4326), point(0,0,4326)], 4326)}
-    
-    it "should return true when we compare line coordinates" do
-      line.to_wgs84.should == line_wgs84
-    end
-
-    it "should return same srid" do
-      line.to_wgs84.srid.should == line_wgs84.srid
-    end
-  end
-  
 end

@@ -1,21 +1,30 @@
 class GeoRuby::SimpleFeatures::Point
 
-  def self.from_lat_lng(object, srid = GeoRuby::SimpleFeatures::DEFAULT_SRID)
-    if object.respond_to?(:to_lat_lng)
-      lat_lng = object.to_lat_lng
-    else
-      lat_lng = Geokit::LatLng.normalize object
-    end 
-    from_x_y lat_lng.lng, lat_lng.lat, srid
+  def ==(other)
+    other and distance(other) < 10e-3
   end
 
+  def euclidian_distance_with_srid_support(other)
+    to_wgs84.euclidian_distance_without_srid_support(other.to_wgs84)
+  end
+  alias_method_chain :euclidian_distance, :srid_support
+
+  def spherical_distance_with_srid_support(other)
+    to_wgs84.spherical_distance_without_srid_support(other.to_wgs84)
+  end
+  alias_method_chain :spherical_distance, :srid_support
+
+  # TODO use euclidian_distance when other is very close
+  alias_method :distance, :spherical_distance
+
   def eql?(other)
-     [x,y,srid] == [other.x, other.y, other.srid]
+     [x,y,z,srid] == [other.x, other.y, other.z, other.srid]
   end
 
   def hash
     [x,y,srid].hash
   end
+
 
   def to_s
     "#{y},#{x}"
@@ -28,7 +37,7 @@ class GeoRuby::SimpleFeatures::Point
     when 1
       points.first
     when 2
-      return GeoRuby::SimpleFeatures::Point.from_x_y points.map(&:x).sum / 2, points.map(&:y).sum / 2, points.first.srid
+      return GeoRuby::SimpleFeatures::Point.from_x_y points.sum(&:x) / 2, points.sum(&:y) / 2, points.first.srid
     else
       points = [points.last, *points]
       GeoRuby::SimpleFeatures::Polygon.from_points([points]).centroid.tap do |centroid|
@@ -37,26 +46,53 @@ class GeoRuby::SimpleFeatures::Point
     end
   end
 
+  def self.from_lat_lng(object, srid = 4326)
+    ActiveSupport::Deprecation.warn "Don't use Geokit::LatLng to represent no wgs84 point" unless srid == 4326
+    
+    if object.respond_to?(:to_lat_lng)
+      lat_lng = object.to_lat_lng
+    else
+      lat_lng = Geokit::LatLng.normalize object
+    end 
+    from_x_y lat_lng.lng, lat_lng.lat, srid
+  end
+
   def to_lat_lng
     Geokit::LatLng.new y, x
   end
 
-  def to_s
-    to_lat_lng.to_s
-  end
-
   def to_wgs84
-    self.class.from_lat_lng to_lat_lng.google_to_wgs84, 4326
+    transform 4326
   end
 
   def to_google
-    self.class.from_lat_lng to_lat_lng.wgs84_to_google, 900913
+    transform 900913
+  end
+
+  def to_proj4(ratio = nil)
+    # Proj4 use radian instead of degres
+    ratio ||= (wgs84? ? Proj4::DEG_TO_RAD : 1.0)
+    Proj4::Point.new x * ratio, y * ratio
+  end
+
+  def projection
+    Proj4::Projection.for_srid srid
+  end
+  
+  def transform(target_srid)
+    return self if srid == target_srid
+
+    self.class.from_pro4j projection.transform(Proj4::Projection.for_srid(target_srid), to_proj4), target_srid
+  end
+
+  def self.from_pro4j(point, srid, ratio = nil)
+    ratio ||= (srid == 4326 ? Proj4::RAD_TO_DEG : 1.0)
+    from_x_y point.x * ratio, point.y * ratio, srid
   end
 
   def to_rgeo
-    factory = RGeo::Geos::Factory.create
-    factory.point(self.x, self.y)
-  end  
+    RGeo::Geos.factory(:srid => srid).point(x, y)
+  end
 
   def to_openlayers
     OpenLayers::LonLat.new x, y

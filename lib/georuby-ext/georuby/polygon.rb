@@ -1,15 +1,14 @@
 class GeoRuby::SimpleFeatures::Polygon
 
   def self.circle(center, radius, sides_number = 24)
-    coordinates = (0...sides_number).collect do |side|
+    points = (0...sides_number).collect do |side|
       2 * 180 / sides_number * side
     end.collect do |angle|
-      point = GeoRuby::SimpleFeatures::Point.from_lat_lng(center.to_lat_lng.endpoint(angle, radius, {:units => :kms}))
-      [point.x, point.y]
+      GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(angle, radius, {:units => :kms}), center.srid
     end
     # Close the circle
-    coordinates << coordinates.first
-    from_coordinates [coordinates]
+    points << points.first
+    from_points [points], center.srid
   end
 
   def side_count
@@ -59,10 +58,12 @@ class GeoRuby::SimpleFeatures::Polygon
     self.class.from_points([self.points.collect(&:to_wgs84)], 4326)
   end
 
+  def to_google
+    self.class.from_points([self.points.collect(&:to_google)], 900913)
+  end
+
   def to_rgeo
-    # take only the first ring for the outer ring of RGeo::Feature::Polygon
-    factory = RGeo::Geos::Factory.create #(:srid => srid)
-    polygon = factory.polygon(self.rings.collect(&:to_rgeo).first)
+    RGeo::Geos::factory(:srid => srid).polygon(rings.collect(&:to_rgeo).first)
   end  
 
 end

@@ -3,25 +3,24 @@ require 'spec_helper'
 describe GeoRuby::SimpleFeatures::Polygon do    
   describe "circle" do
     
-    let(:center) {p(1,1)}
-    let(:radius) {1}
-    let(:sides) {8}
+    let(:center) { point 1,1 }
+    let(:radius) { 1 }
+    let(:sides) { 8 }
     
-    def p(x,y)
-      GeoRuby::SimpleFeatures::Point.from_x_y x,y
-    end
-    
+    alias_method :p, :point
+
     def circle(arguments = {})
       arguments = { :center => center, :radius => radius, :sides => sides }.merge(arguments)
       GeoRuby::SimpleFeatures::Polygon.circle(*arguments.values_at(:center, :radius, :sides))
     end
 
     it "should create a square" do
-      p1 = GeoRuby::SimpleFeatures::Point.from_lat_lng(center.to_lat_lng.endpoint(45, radius, {:units => :kms}))
-      p2 = GeoRuby::SimpleFeatures::Point.from_lat_lng(center.to_lat_lng.endpoint(135, radius, {:units => :kms}))
-      p3 = GeoRuby::SimpleFeatures::Point.from_lat_lng(center.to_lat_lng.endpoint(225, radius, {:units => :kms}))
-      p4 = GeoRuby::SimpleFeatures::Point.from_lat_lng(center.to_lat_lng.endpoint(315, radius, {:units => :kms}))
-      circle(:sides => 4).should be_same_polygon([[p1.x,p1.y], [p2.x,p2.y], [p3.x,p3.y], [p4.x,p4.y], [p1.x, p1.y]])
+      p1 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(0, radius, :units => :kms)
+      p2 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(90, radius, :units => :kms)
+      p3 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(180, radius, :units => :kms)
+      p4 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(270, radius, :units => :kms)
+
+      circle(:sides => 4).should == polygon(p1, p2, p3, p4, p1)
     end
     
     it "should have the given side count" do
@@ -63,15 +62,15 @@ describe GeoRuby::SimpleFeatures::Polygon do
   end
 
   describe "#to_wgs84" do
-    let(:polygon_google) {polygon(point(0,0), point(0,1), point(1,0), point(0,0))}
-    let(:polygon_wgs84) {    GeoRuby::SimpleFeatures::Polygon.from_points([[point(0, 0, 4326), point(0, 0.000008983152840993819, 4326), point(0.000008983152841195214, 0, 4326), point(0, 0, 4326)]], 4326)} 
+    let(:polygon_google) { geometry "POLYGON((0.0 -7.08115455161362e-10,0.0 111325.142866385,111319.490793272 -7.08115455161362e-10,0.0 -7.08115455161362e-10))", 900913 }
+    let(:polygon_wgs84) { geometry "POLYGON((0 0,0 1,1 0,0 0))" } 
     
     it "should return a polygon in wgs84 coordinates" do
       polygon_google.to_wgs84.should == polygon_wgs84
     end
 
-    it "should return same srid" do
-      polygon_google.to_wgs84.srid.should == polygon_wgs84.srid
+    it "should return a polygon with wgs84 srid" do
+      subject.to_wgs84.srid.should == 4326
     end
   end
 

@@ -41,7 +41,6 @@ describe GeoRuby::SimpleFeatures::LineString do
       
       it "should have the same srid" do
         subject.to_ring.should have_same(:srid).than(subject)
-        # subject.to_ring.srid.should == subject.srid
       end
 
       context "when line is closed" do
@@ -95,6 +94,8 @@ describe GeoRuby::SimpleFeatures::LineString do
   end
 
   describe "#to_wgs84" do
+
+    subject { line_string("0 0,1 1,0 0").to_google }
 
     it "should project all points into wgs84" do
       subject.to_wgs84.points.each_with_index do |wgs84_point, index|

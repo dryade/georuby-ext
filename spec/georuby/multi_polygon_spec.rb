@@ -3,17 +3,14 @@ require "spec_helper"
 describe  GeoRuby::SimpleFeatures::MultiPolygon do
   
   describe "#to_wgs84" do
-    
-    let(:polygon_google) {polygon(point(0,0), point(0,1), point(1,0), point(0,0))}
-    let(:polygon_wgs84) { GeoRuby::SimpleFeatures::Polygon.from_points([[point(0, 0, 4326), point(0, 0.000008983152840993819, 4326), point(0.000008983152841195214, 0, 4326), point(0, 0, 4326)]], 4326)} 
-    let(:multi_polygon_google) {multi_polygon(polygon_google, polygon_google)}
-    let(:multi_polygon_wgs84) {GeoRuby::SimpleFeatures::MultiPolygon.from_polygons([polygon_wgs84, polygon_wgs84], 4326)}
+    let(:multi_polygon_google) { geometry "MULTIPOLYGON(((0.0 -7.08115455161362e-10,0.0 111325.142866385,111319.490793272 -7.08115455161362e-10,0.0 -7.08115455161362e-10)))", 900913 }
+    let(:multi_polygon_wgs84) { geometry "MULTIPOLYGON(((0 0,0 1,1 0,0 0)))" } 
     
     it "should return a polygon in wgs84 coordinates" do
       multi_polygon_google.to_wgs84.should == multi_polygon_wgs84
     end
 
-    it "should return same srid" do
+    it "should return a multi_polygon with wgs84 srid" do
       multi_polygon_google.to_wgs84.srid.should == multi_polygon_wgs84.srid
     end
   end

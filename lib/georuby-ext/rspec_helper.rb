@@ -21,7 +21,7 @@ def geometry(text, srid = 4326)
 end
 
 def point(x=0.0, y=0.0, srid = 4326)
-  GeoRuby::SimpleFeatures::Point.from_x_y(x,y,srid)
+  GeoRuby::SimpleFeatures::Point.from_x_y x, y, srid
 end
 
 def points(text)
@@ -32,20 +32,28 @@ def line_string(*points)
   if points.one? and String === points.first
     geometry("LINESTRING(#{points})")
   else
-    GeoRuby::SimpleFeatures::LineString.from_points(points)
+    GeoRuby::SimpleFeatures::LineString.from_points(points, points.first.srid)
+  end
+end
+
+def multi_line_string(*lines)
+  if lines.one? and String === lines.first
+    geometry("MULTILINESTRING(#{lines})")
+  else
+    GeoRuby::SimpleFeatures::MultiLineString.from_line_strings lines, lines.first.srid
   end
 end
 
 def linear_ring(*points)
-  GeoRuby::SimpleFeatures::LinearRing.from_points(points)
+  GeoRuby::SimpleFeatures::LinearRing.from_points(points, points.first.srid)
 end
 
 def polygon(*points)
-  GeoRuby::SimpleFeatures::Polygon.from_points([points])
+  GeoRuby::SimpleFeatures::Polygon.from_points([points], points.first.srid)
 end
 
 def multi_polygon(*polygons)
-  GeoRuby::SimpleFeatures::MultiPolygon.from_polygons([polygons])
+  GeoRuby::SimpleFeatures::MultiPolygon.from_polygons([polygons], polygons.first.srid)
 end
 
 def rgeo_point(x = 0, y = 0, srid = 4326)

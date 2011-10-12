@@ -16,6 +16,10 @@ class GeoRuby::SimpleFeatures::LineString
     change :points => points.map(&:to_wgs84), :srid => 4326
   end
 
+  def to_google
+    change :points => points.map(&:to_google), :srid => 900913
+  end
+
   def self.merge(lines)
     merged_points = lines.map(&:points).flatten.uniq
     if merged_points.size > 1
