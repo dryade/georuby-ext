@@ -1,5 +1,4 @@
 require 'active_support/core_ext/object/blank'
-require 'active_support/core_ext/object/try'
 
 class GeoRuby::SimpleFeatures::Point
 
@@ -39,10 +38,10 @@ class GeoRuby::SimpleFeatures::Point
     when 1
       points.first
     when 2
-      from_x_y points.sum(&:x) / 2, points.sum(&:y) / 2, points.first.srid
+      from_x_y points.sum(&:x) / 2, points.sum(&:y) / 2, srid!(points)
     else
       points = [points.last, *points] # polygon must be closed for rgeo
-      GeoRuby::SimpleFeatures::Polygon.from_points([points], points.first.srid).centroid
+      GeoRuby::SimpleFeatures::Polygon.from_points([points], srid!(points)).centroid
     end
   end
 
@@ -111,8 +110,10 @@ class GeoRuby::SimpleFeatures::Point
     end
   end
 
-  def self.srid(points)
-    points.first.try(:srid)
+  def self.srid!(points)
+    points.first.srid.tap do |srid|
+      raise "SRIDs are not uniq in #{points.inspect}" if points.any? { |point| point.srid != srid }
+    end unless points.blank?
   end
 
 end

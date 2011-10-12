@@ -238,13 +238,27 @@ describe GeoRuby::SimpleFeatures::Point do
     let(:some_points) { points("0 0,1 1,1 0,0 1") }
 
     it "should return an Envelope with the same srid than points" do
-      GeoRuby::SimpleFeatures::Point.bounds(some_points).srid.should == GeoRuby::SimpleFeatures::Point.srid(some_points)
+      GeoRuby::SimpleFeatures::Point.bounds(some_points).srid.should == GeoRuby::SimpleFeatures::Point.srid!(some_points)
     end
 
     it "should return '0 0,1 1' for '0 0,1 1,1 0,0 1'" do
-      bounds = GeoRuby::SimpleFeatures::Point.bounds(points('0 0,1 1,2 2,3 3'))
-      bounds.lower_corner.should == point(0, 0)
-      bounds.upper_corner.should == point(3, 3)
+      bounds = GeoRuby::SimpleFeatures::Point.bounds(points('0 0,1 1,1 0,0 1'))
+      bounds.lower_corner.should == point(0,0)
+      bounds.upper_corner.should == point(1,1)
+    end
+
+  end
+
+  describe ".srid!" do
+    
+    it "should return the uniq srid of given points" do
+      GeoRuby::SimpleFeatures::Point.srid!([point.to_google]).should == 900913
+    end
+
+    it "should raise an error when srid is not uniq" do
+      lambda do
+        GeoRuby::SimpleFeatures::Point.srid!([point, point.to_google])
+      end.should raise_error
     end
 
   end
