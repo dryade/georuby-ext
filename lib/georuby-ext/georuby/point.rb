@@ -1,3 +1,6 @@
+require 'active_support/core_ext/object/blank'
+require 'active_support/core_ext/object/try'
+
 class GeoRuby::SimpleFeatures::Point
 
   def ==(other)
@@ -59,27 +62,27 @@ class GeoRuby::SimpleFeatures::Point
   end
 
   def to_wgs84
-    transform 4326
+    project 4326
   end
 
   def to_google
-    transform 900913
-  end
-
-  def to_proj4(ratio = nil)
-    # Proj4 use radian instead of degres
-    ratio ||= (wgs84? ? Proj4::DEG_TO_RAD : 1.0)
-    Proj4::Point.new x * ratio, y * ratio
+    project 900913
   end
 
   def projection
     Proj4::Projection.for_srid srid
   end
   
-  def transform(target_srid)
+  def project(target_srid)
     return self if srid == target_srid
 
     self.class.from_pro4j projection.transform(Proj4::Projection.for_srid(target_srid), to_proj4), target_srid
+  end
+
+  def to_proj4(ratio = nil)
+    # Proj4 use radian instead of degres
+    ratio ||= (wgs84? ? Proj4::DEG_TO_RAD : 1.0)
+    Proj4::Point.new x * ratio, y * ratio
   end
 
   def self.from_pro4j(point, srid, ratio = nil)
@@ -95,8 +98,9 @@ class GeoRuby::SimpleFeatures::Point
     OpenLayers::LonLat.new x, y
   end
 
+  # Fixes original bounding_box which creates points without srid
   def bounding_box
-    [dup] * (with_z ? 3 : 2)
+    Array.new(with_z ? 3 : 2) { dup }
   end
 
   def self.bounds(points)
@@ -105,6 +109,10 @@ class GeoRuby::SimpleFeatures::Point
     points.inject(points.first.envelope) do |envelope, point|
       envelope.extend!(point.envelope)
     end
+  end
+
+  def self.srid(points)
+    points.first.try(:srid)
   end
 
 end

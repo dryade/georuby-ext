@@ -2,10 +2,7 @@ require 'spec_helper'
 
 describe GeoRuby::SimpleFeatures::Point do
 
-  subject { point 1, 1 }
-
-  let(:tour_eiffel_in_wgs84) { point 48.8580,2.2946,4326 }
-  let(:tour_eiffel_in_google) { point 5438847.68117776, 255502.011303386, 900913 }
+  subject { point 1, 2 }
 
   describe "#==" do
 
@@ -83,24 +80,30 @@ describe GeoRuby::SimpleFeatures::Point do
 
   describe "#to_wgs84" do
 
+    let(:projected_point) { mock }
+
     it "should return a point with 4326 srid" do
       subject.to_wgs84.srid.should == 4326
     end
 
-    it "should return the same location in wgs84 srid" do
-      tour_eiffel_in_google.to_wgs84.should == tour_eiffel_in_wgs84
+    it "should project the point in wgs84" do
+      subject.should_receive(:project).with(4326).and_return(projected_point)
+      subject.to_wgs84.should == projected_point
     end
 
   end
 
   describe "#to_google" do
 
+    let(:projected_point) { mock }
+
     it "should return a point with 900913 srid" do
       subject.to_google.srid.should == 900913
     end
 
-    it "should return the same location in google srid" do
-      tour_eiffel_in_google.to_google.should == tour_eiffel_in_wgs84
+    it "should project the point in google" do
+      subject.should_receive(:project).with(900913).and_return(projected_point)
+      subject.to_google.should == projected_point
     end
 
   end
@@ -178,6 +181,14 @@ describe GeoRuby::SimpleFeatures::Point do
     
   end
 
+  describe "to_s" do
+    
+    it "should contain 'y,x'" do
+      point(1,2).to_s.should == "2,1"
+    end
+
+  end
+
   describe "#bounding_box" do
 
     it "should be itself twice" do
@@ -189,6 +200,53 @@ describe GeoRuby::SimpleFeatures::Point do
       subject.bounding_box.should == [subject] * 3
     end
     
+  end
+
+  describe "#projection" do
+
+    let(:projection) { mock :projection }
+    
+    it "should return projection associated to srid" do
+      Proj4::Projection.should_receive(:for_srid).with(subject.srid).and_return(projection)
+      subject.projection.should == projection
+    end
+
+  end
+
+  describe "#project" do
+
+    let(:tour_eiffel_in_wgs84) { point 48.8580,2.2946,4326 }
+    let(:tour_eiffel_in_google) { point 5438847.68117776, 255502.011303386, 900913 }
+
+    it "should return the Point when the target srid is the same" do
+      subject.project(subject.srid).should == subject
+    end
+
+    it "should return a Point with the target srid" do
+      subject.project(900913).srid.should == 900913
+    end
+
+    it "should return a Point projected into the target srid" do
+      tour_eiffel_in_google.project(tour_eiffel_in_wgs84.srid).should == tour_eiffel_in_wgs84
+      tour_eiffel_in_wgs84.project(tour_eiffel_in_google.srid).should == tour_eiffel_in_google
+    end
+
+  end
+
+  describe ".bounds" do
+
+    let(:some_points) { points("0 0,1 1,1 0,0 1") }
+
+    it "should return an Envelope with the same srid than points" do
+      GeoRuby::SimpleFeatures::Point.bounds(some_points).srid.should == GeoRuby::SimpleFeatures::Point.srid(some_points)
+    end
+
+    it "should return '0 0,1 1' for '0 0,1 1,1 0,0 1'" do
+      bounds = GeoRuby::SimpleFeatures::Point.bounds(points('0 0,1 1,2 2,3 3'))
+      bounds.lower_corner.should == point(0, 0)
+      bounds.upper_corner.should == point(3, 3)
+    end
+
   end
 
 end
