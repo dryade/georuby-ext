@@ -18,6 +18,7 @@ class GeoRuby::SimpleFeatures::LineString
   end
 
   def self.merge(lines)
+    # FIXME flatten.uniq can break crossing lines
     merged_points = lines.map(&:points).flatten.uniq
     if merged_points.size > 1
       from_points merged_points, srid!(lines), lines.first.with_z, lines.first.with_m

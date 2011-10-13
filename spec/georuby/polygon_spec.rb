@@ -4,7 +4,7 @@ describe GeoRuby::SimpleFeatures::Polygon do
   describe "circle" do
     
     let(:center) { point 1,1 }
-    let(:radius) { 1 }
+    let(:radius) { 1000 }
     let(:sides) { 8 }
     
     alias_method :p, :point
@@ -15,10 +15,10 @@ describe GeoRuby::SimpleFeatures::Polygon do
     end
 
     it "should create a square" do
-      p1 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(0, radius, :units => :kms)
-      p2 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(90, radius, :units => :kms)
-      p3 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(180, radius, :units => :kms)
-      p4 = GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(270, radius, :units => :kms)
+      p1 = center.endpoint 0, radius
+      p2 = center.endpoint 90, radius
+      p3 = center.endpoint 180, radius
+      p4 = center.endpoint 270, radius
 
       circle(:sides => 4).should == polygon(p1, p2, p3, p4, p1)
     end
@@ -34,13 +34,8 @@ describe GeoRuby::SimpleFeatures::Polygon do
     end
     
     it "should have all its points as the radius distance of the center" do
-      first_distance = circle.points.first.euclidian_distance(center)
-      circle.points.collect do |point| 
-        point.euclidian_distance(center)
-      end.each do |distance|
-        #puts distance
-        #puts first_distance
-        distance.should be_within(0.0001).of(first_distance)
+      circle.points.all? do |point| 
+        point.distance(center).should be_within(0.0001).of(radius)
       end  
     end
 

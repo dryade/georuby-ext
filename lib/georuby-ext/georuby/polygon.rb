@@ -1,13 +1,15 @@
 class GeoRuby::SimpleFeatures::Polygon
 
   def self.circle(center, radius, sides_number = 24)
-    points = (0...sides_number).collect do |side|
+    points = sides_number.times.map do |side|
       2 * 180 / sides_number * side
-    end.collect do |angle|
-      GeoRuby::SimpleFeatures::Point.from_lat_lng center.to_lat_lng.endpoint(angle, radius, {:units => :kms}), center.srid
+    end.map do |angle|
+      center.endpoint angle, radius
     end
+
     # Close the circle
     points << points.first
+
     from_points [points], center.srid
   end
 

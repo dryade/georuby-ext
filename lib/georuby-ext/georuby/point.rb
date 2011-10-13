@@ -2,6 +2,14 @@ require 'active_support/core_ext/object/blank'
 
 class GeoRuby::SimpleFeatures::Point
 
+  def change(options)
+    # TODO support z
+    self.class.from_x_y(options[:x] || x, 
+                        options[:y] || y, 
+                        options[:srid] || srid)
+    # or instead of || requires parenthesis
+  end
+
   def ==(other)
     other and distance(other) < 10e-3
   end
@@ -18,6 +26,71 @@ class GeoRuby::SimpleFeatures::Point
 
   # TODO use euclidian_distance when other is very close
   alias_method :distance, :spherical_distance
+
+  def endpoint(heading, distance, options={})
+    Endpointer.new(self, heading, distance, options).arrival
+  end
+
+  class Endpointer
+
+    attr_accessor :origin, :heading, :distance, :unit
+
+    def initialize(origin, heading, distance, options = {})
+      @origin, @heading, @distance = origin, heading.deg2rad, distance
+    end
+
+    def radius
+      # earth radius in kms
+
+      # GeoRuby Point#spherical_distance uses 6370997.0 m
+      # Geokit::LatLng uses 6376.77271 km
+      # ...
+
+      6370997.0
+    end
+
+    def distance_per_radius
+      @distance_per_radius ||= distance / radius
+    end
+
+    def cos_distance_per_radius
+      @cos_distance_per_radius ||= Math.cos(distance_per_radius)
+    end
+
+    def sin_distance_per_radius
+      @sin_distance_per_radius ||= Math.sin(distance_per_radius)
+    end
+
+    def latitude
+      @latitude ||= origin.lat.deg2rad
+    end
+
+    def cos_latitude
+      @cos_latitude ||= Math.cos(latitude)
+    end
+
+    def sin_latitude
+      @sin_latitude ||= Math.sin(latitude)
+    end
+
+    def longitude
+      @longitude ||= origin.lng.deg2rad
+    end
+
+    def arrival_latitude
+      Math.asin(sin_latitude * cos_distance_per_radius +
+                cos_latitude * sin_distance_per_radius * Math.cos(heading))
+    end
+
+    def arrival_longitude
+      longitude + Math.atan2(Math.sin(heading) * sin_distance_per_radius * cos_latitude,
+                             cos_distance_per_radius - sin_latitude * Math.sin(arrival_latitude))
+    end
+
+    def arrival
+      origin.change :x => arrival_longitude.rad2deg, :y => arrival_latitude.rad2deg    end
+
+  end
 
   def eql?(other)
      [x,y,z,srid] == [other.x, other.y, other.z, other.srid]

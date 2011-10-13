@@ -5,6 +5,8 @@ require 'proj4'
 
 require 'active_support/core_ext/enumerable'
 
+require 'georuby-ext/core_ext'
+
 require 'georuby-ext/rgeo'
 require 'georuby-ext/geokit'
 require 'georuby-ext/proj4'

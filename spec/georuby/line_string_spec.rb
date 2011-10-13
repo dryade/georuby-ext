@@ -71,7 +71,7 @@ describe GeoRuby::SimpleFeatures::LineString do
       subject.change(:points => other_points).points.should == other_points
     end
 
-    it "should change the points if specified" do
+    it "should change the srid if specified" do
       subject.change(:srid => 1).srid.should == 1
     end
 

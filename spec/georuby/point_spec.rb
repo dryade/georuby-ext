@@ -219,4 +219,42 @@ describe GeoRuby::SimpleFeatures::Point do
 
   end
 
+  describe "#endpoint" do
+
+    let(:distance) { 10000 }
+    
+    it "should return a point at the given distance" do
+      subject.endpoint(rand(360), distance).distance(subject).should be_within(0.001).of(distance)
+    end
+
+    it "should not change longitude when heading is 0 (north)" do
+      subject.endpoint(0, distance).should have_same(:lng).than(subject)
+    end
+
+    it "should not change latitude when heading is 90 (east)" do
+      subject.endpoint(90, distance).lat.should be_within(0.0001).of(subject.lat)
+    end
+
+  end
+
+  describe "#change" do
+    
+    it "should change x if specified" do
+      subject.change(:x => 42).x.should == 42
+    end
+
+    it "should change y if specified" do
+      subject.change(:y => 42).y.should == 42
+    end
+
+    it "should change the srid if specified" do
+      subject.change(:srid => 1).srid.should == 1
+    end
+
+    it "should not change unspecified attributes" do
+      subject.change(:x => 1).should have_same(:y, :srid, :with_z, :with_m).than(subject)
+    end
+
+  end
+
 end
