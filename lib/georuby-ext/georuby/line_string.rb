@@ -29,15 +29,21 @@ class GeoRuby::SimpleFeatures::LineString
     RGeo::Geos::factory(:srid => srid).line_string(points.collect(&:to_rgeo))
   end
 
+  def side_count
+    size - 1
+  end
+
   def ==(other)
     other.respond_to?(:points) and points == other.points
   end
 
-  alias_method :closed?, :is_closed
+  def close!
+    points << points.first unless closed?
+    self
+  end
 
   def to_ring
-    ring_points = closed? ? points : points + [first]
-    GeoRuby::SimpleFeatures::LinearRing.from_points ring_points, srid, with_z, with_m
+    GeoRuby::SimpleFeatures::LinearRing.from_points points, srid, with_z, with_m
   end
 
 end

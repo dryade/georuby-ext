@@ -56,7 +56,7 @@ end
 class GeoRuby::SimpleFeatures::LineString
 
   def locate_point(target)
-    distance_on_line(target) / distance
+    distance_on_line(target) / euclidian_distance
   end
 
   def distance_on_line(target)
@@ -93,15 +93,11 @@ class GeoRuby::SimpleFeatures::LineString
     end
   end
 
-  def distance
-    segments.sum(&:distance)
-  end
-
   def interpolate_point(location)
     return points.last if location >= 1
     return points.first if location <= 0
 
-    distance_on_line = location * distance
+    distance_on_line = location * euclidian_distance
 
     segment = segments.find do |segment|
       segment.line_distance_at_arrival > distance_on_line
@@ -138,7 +134,7 @@ class GeoRuby::SimpleFeatures::LineString
     end
 
     def square_of_distance
-      (arrival.x - departure.x)**2 + (arrival.y - departure.y)**2
+      distance**2
     end
 
     def distance
@@ -208,16 +204,16 @@ class GeoRuby::SimpleFeatures::LineString
     end
 
     def square_of_segment_distance
-      (arrival.x - departure.x)**2 + (arrival.y - departure.y)**2
+      segment_distance ** 2
     end
     memoize :square_of_segment_distance
 
     def segment_distance
-      sqrt square_of_segment_distance
+      departure.euclidian_distance arrival
     end
 
     def target_distance_from_departure
-      sqrt((target.x - departure.x)**2 + (target.y - departure.y)**2)
+      departure.euclidian_distance target
     end
 
   end

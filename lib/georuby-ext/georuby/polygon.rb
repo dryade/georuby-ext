@@ -1,25 +1,26 @@
+
 class GeoRuby::SimpleFeatures::Polygon
 
   def self.circle(center, radius, sides_number = 24)
     points = sides_number.times.map do |side|
       2 * 180 / sides_number * side
-    end.map do |angle|
+    end.map! do |angle|
       center.endpoint angle, radius
     end
-
-    # Close the circle
-    points << points.first
 
     from_points [points], center.srid
   end
 
   def side_count
-    # Reduce by one because polygon is closed
-    (rings.collect(&:size).sum) - 1
+    rings.sum(&:side_count)
   end
 
   def points
     rings.collect(&:points).flatten
+  end
+
+  def perimeter
+    rings.sum(&:spherical_distance)
   end
 
   def centroid
@@ -56,16 +57,21 @@ class GeoRuby::SimpleFeatures::Polygon
     polygon_intersection.to_georuby
   end
 
-  def to_wgs84
-    self.class.from_points([self.points.collect(&:to_wgs84)], 4326)
-  end
-
-  def to_google
-    self.class.from_points([self.points.collect(&:to_google)], 900913)
-  end
-
   def to_rgeo
-    RGeo::Geos::factory(:srid => srid).polygon(rings.collect(&:to_rgeo).first)
+    RGeo::Geos::factory(:srid => srid).polygon(rings.first.to_rgeo)
   end  
+
+  def change(options)
+    self.class.from_linear_rings(options[:rings] || rings, 
+                                 options[:srid] || srid,
+                                 options[:with_z] || with_z, 
+                                 options[:with_m] || with_m)
+    # or instead of || requires parenthesis
+  end
+
+  def project_to(target_srid)
+    return self if srid == target_srid
+    change :rings => rings.map { |ring| ring.project_to(target_srid) }, :srid => target_srid
+  end
 
 end

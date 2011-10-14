@@ -109,14 +109,30 @@ describe GeoRuby::SimpleFeatures::LineString do
     end
 
     it "should not change other attributes" do
-      subject.reverse.should have_same(:with_z, :with_m).than(subject)
+      subject.project_to(target_srid).should have_same(:with_z, :with_m).than(subject)
     end
 
   end
 
-  it "should be closed when is_closed is true" do
-    subject.stub :is_closed => true
-    subject.should be_closed
+  describe "#close!" do
+    
+    it "should add first point if needed" do
+      line_string("0 0,1 1").close!.should == line_string("0 0,1 1,0 0")
+    end
+
+    it "should not change a closed line" do
+      line_string("0 0,1 1,0 0").close!.should == line_string("0 0,1 1,0 0")
+    end
+
+  end
+
+  describe "#side_count" do
+    
+    it "should return point count minus one" do
+      line_string("0 0,1 1,2 2").side_count.should == 2
+    end
+
   end
 
 end
+

@@ -11,21 +11,15 @@ class GeoRuby::SimpleFeatures::Point
   end
 
   def ==(other)
-    other and distance(other) < 10e-3
+    other and 
+      other.respond_to?(:lat) and other.respond_to?(:lng) and
+      spherical_distance(other) < 10e-3
   end
-
-  def euclidian_distance_with_srid_support(other)
-    to_wgs84.euclidian_distance_without_srid_support(other.to_wgs84)
-  end
-  alias_method_chain :euclidian_distance, :srid_support
 
   def spherical_distance_with_srid_support(other)
     to_wgs84.spherical_distance_without_srid_support(other.to_wgs84)
   end
   alias_method_chain :spherical_distance, :srid_support
-
-  # TODO use euclidian_distance when other is very close
-  alias_method :distance, :spherical_distance
 
   def endpoint(heading, distance, options={})
     Endpointer.new(self, heading, distance, options).arrival

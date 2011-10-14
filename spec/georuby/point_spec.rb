@@ -6,34 +6,24 @@ describe GeoRuby::SimpleFeatures::Point do
 
   describe "#==" do
 
-    let(:other) { mock :other }
+    let(:other) { mock :other, :lat => nil, :lng => nil }
     
     it "should return false if other is nil" do
       subject.should_not == nil
     end
 
-    it "should return true if distance to other is smaller than 10e-3 (< 1m)" do
-      subject.stub :distance => 10e-4
+    it "should return true if spherical_distance to other is smaller than 10e-3 (< 1m)" do
+      subject.stub :spherical_distance => 10e-4
       subject.should == other
     end
 
-    it "should return false if distance to other is greater or equals to 10e-3 (>= 1m)" do
-      subject.stub :distance => 10e-3
+    it "should return false if spherical distance to other is greater or equals to 10e-3 (>= 1m)" do
+      subject.stub :spherical_distance => 10e-3
       subject.should_not == other
     end
 
     it "should match the same point into 2 different srid" do
       subject.to_google.should == subject
-    end
-
-  end
-
-  describe "euclidian_distance" do
-
-    let(:other) { point 2, 2 }
-    
-    it "should transform the other point into wgs84" do
-      subject.euclidian_distance(other.to_google).should be_within(0.0001).of(subject.euclidian_distance(other))
     end
 
   end
@@ -185,8 +175,8 @@ describe GeoRuby::SimpleFeatures::Point do
 
   describe "#project_to" do
 
-    let(:tour_eiffel_in_wgs84) { point 48.8580,2.2946,4326 }
-    let(:tour_eiffel_in_google) { point 5438847.68117776, 255502.011303386, 900913 }
+    let(:tour_eiffel_in_wgs84) { point 2.2946, 48.8580, 4326 }
+    let(:tour_eiffel_in_google) { point 255433.703574246, 6250801.22232508, 900913 }
 
     it "should return the Point when the target srid is the same" do
       subject.project_to(subject.srid).should == subject
@@ -224,7 +214,7 @@ describe GeoRuby::SimpleFeatures::Point do
     let(:distance) { 10000 }
     
     it "should return a point at the given distance" do
-      subject.endpoint(rand(360), distance).distance(subject).should be_within(0.001).of(distance)
+      subject.endpoint(rand(360), distance).spherical_distance(subject).should be_within(0.001).of(distance)
     end
 
     it "should not change longitude when heading is 0 (north)" do

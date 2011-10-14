@@ -52,8 +52,17 @@ describe GeoRuby::SimpleFeatures::LineString do
       
     end
 
-  end
+    it "should find Tour Eiffel at .. on Avenue Gustave Eiffel" do
+      pending "FIXME compute metric values"
 
+      tour_eiffel = point 2.2946, 48.8580
+      avenue_gustave_eiffel = line_string "2.29406861440145 48.8570391455916,2.29498049424636 48.8576531708278,2.29540512788116 48.8579392878211,2.29634853859254 48.8585744605187"
+      expected_location = 0.434073695339917
+
+      avenue_gustave_eiffel.locate_point(tour_eiffel).should == expected_location
+    end
+
+  end
 
 end
 
@@ -92,5 +101,6 @@ describe GeoRuby::SimpleFeatures::LineString::PointLocator do
     end
 
   end
+
 
 end

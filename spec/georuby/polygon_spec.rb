@@ -1,17 +1,16 @@
 require 'spec_helper'
 
 describe GeoRuby::SimpleFeatures::Polygon do    
+
   describe "circle" do
     
     let(:center) { point 1,1 }
     let(:radius) { 1000 }
     let(:sides) { 8 }
     
-    alias_method :p, :point
-
     def circle(arguments = {})
       arguments = { :center => center, :radius => radius, :sides => sides }.merge(arguments)
-      GeoRuby::SimpleFeatures::Polygon.circle(*arguments.values_at(:center, :radius, :sides))
+      GeoRuby::SimpleFeatures::Polygon.circle *arguments.values_at(:center, :radius, :sides)
     end
 
     it "should create a square" do
@@ -35,38 +34,37 @@ describe GeoRuby::SimpleFeatures::Polygon do
     
     it "should have all its points as the radius distance of the center" do
       circle.points.all? do |point| 
-        point.distance(center).should be_within(0.0001).of(radius)
+        point.spherical_distance(center).should be_within(0.0001).of(radius)
       end  
     end
 
     it "should have the same distance between all its points" do
-      points = circle.points.dup
-      previous = points.shift
-      distances = points.collect do |point| 
-        previous.euclidian_distance(point).tap do |distance|
-          previous = point
-        end
+      average_distance = circle.perimeter / circle.side_count
+      circle.points.each_cons(2) do |point, next_point|
+        point.spherical_distance(next_point).should be_within(0.01).of(average_distance)
       end
-
-      average_distance = distances.sum / distances.size
-
-      distances.each do |distance| 
-        distance.should be_within(0.01).of(average_distance)
-      end  
     end
   end
 
-  describe "#to_wgs84" do
-    let(:polygon_google) { geometry "POLYGON((0.0 -7.08115455161362e-10,0.0 111325.142866385,111319.490793272 -7.08115455161362e-10,0.0 -7.08115455161362e-10))", 900913 }
-    let(:polygon_wgs84) { geometry "POLYGON((0 0,0 1,1 0,0 0))" } 
-    
-    it "should return a polygon in wgs84 coordinates" do
-      polygon_google.to_wgs84.should == polygon_wgs84
+  describe "#project_to" do
+
+    let(:target_srid) { 900913 }
+    subject { polygon("(0 0,1 1,1 0)") }
+
+    it "should project all rings into wgs84" do
+      subject.project_to(target_srid).rings.each_with_index do |ring, index|
+        ring.should == subject[index].project_to(target_srid)
+      end
     end
 
-    it "should return a polygon with wgs84 srid" do
-      subject.to_wgs84.srid.should == 4326
+    it "should have the target srid" do
+      subject.project_to(target_srid).srid.should == target_srid
     end
+
+    it "should not change other attributes" do
+      subject.project_to(target_srid).should have_same(:with_z, :with_m).than(subject)
+    end
+
   end
 
   describe "to_rgeo" do
@@ -75,7 +73,10 @@ describe GeoRuby::SimpleFeatures::Polygon do
       factory.polygon(factory.line_string([factory.point(0, 0), factory.point(0, 2), factory.point(2, 2), factory.point(2, 0),  factory.point(0, 0)]))}
     
     let(:georuby_polygon){ polygon(point(0,0), point(0,2), point(2,2), point(2,0), point(0,0))}      
+
     it "should return a polygon RGeo::Feature::Polygon" do
+      
+
       georuby_polygon.to_rgeo.should == result
     end
   end
@@ -121,6 +122,14 @@ describe GeoRuby::SimpleFeatures::Polygon do
     
     it "should be true when points are same" do
       geometry("POLYGON((0 0,1 1))").should == geometry("POLYGON((0 0,1 1))")
+    end
+
+  end
+
+  describe "side_count" do
+    
+    it "should return 3 for a triangle" do
+      polygon("(0 0,1 0,0 1)").side_count.should == 3
     end
 
   end

@@ -49,7 +49,11 @@ def linear_ring(*points)
 end
 
 def polygon(*points)
-  GeoRuby::SimpleFeatures::Polygon.from_points([points], points.first.srid)
+  if points.one? and String === points.first
+    geometry("POLYGON(#{points})")
+  else
+    GeoRuby::SimpleFeatures::Polygon.from_points([points], points.first.srid)
+  end
 end
 
 def multi_polygon(*polygons)
