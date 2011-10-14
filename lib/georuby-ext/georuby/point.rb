@@ -2,6 +2,28 @@ require 'active_support/core_ext/object/blank'
 
 class GeoRuby::SimpleFeatures::Point
 
+  # Earth radius in kms
+  #
+  # GeoRuby Point#spherical_distance uses 6370997.0 m
+  # Geokit::LatLng uses 6376.77271 km
+  # ...
+  @@earth_radius = 6370997.0
+  def self.earth_radius
+    @@earth_radius 
+  end
+  def earth_radius
+    self.class.earth_radius
+  end
+
+  # Length of a latitude degree in meters
+  @@latitude_degree_distance = @@earth_radius * 2 * Math::PI / 360
+  def self.latitude_degree_distance
+    @@latitude_degree_distance 
+  end
+  def latitude_degree_distance
+    self.class.latitude_degree_distance
+  end
+
   def change(options)
     # TODO support z
     self.class.from_x_y(options[:x] || x, 
@@ -34,13 +56,7 @@ class GeoRuby::SimpleFeatures::Point
     end
 
     def radius
-      # earth radius in kms
-
-      # GeoRuby Point#spherical_distance uses 6370997.0 m
-      # Geokit::LatLng uses 6376.77271 km
-      # ...
-
-      6370997.0
+      GeoRuby::SimpleFeatures::Point.earth_radius
     end
 
     def distance_per_radius
@@ -167,6 +183,13 @@ class GeoRuby::SimpleFeatures::Point
     points.inject(points.first.envelope) do |envelope, point|
       envelope.extend!(point.envelope)
     end
+  end
+
+  def metric_delta(other)
+    longitude_degree_distance =
+      (latitude_degree_distance * Math.cos(lat.deg2rad)).abs
+    [ latitude_degree_distance * (other.lat - lat),
+      longitude_degree_distance * (other.lng - lng) ]
   end
 
 end

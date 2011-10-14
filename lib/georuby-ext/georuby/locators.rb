@@ -56,7 +56,7 @@ end
 class GeoRuby::SimpleFeatures::LineString
 
   def locate_point(target)
-    distance_on_line(target) / euclidian_distance
+    distance_on_line(target) / spherical_distance
   end
 
   def distance_on_line(target)
@@ -97,7 +97,7 @@ class GeoRuby::SimpleFeatures::LineString
     return points.last if location >= 1
     return points.first if location <= 0
 
-    distance_on_line = location * euclidian_distance
+    distance_on_line = location * spherical_distance
 
     segment = segments.find do |segment|
       segment.line_distance_at_arrival > distance_on_line
@@ -138,7 +138,7 @@ class GeoRuby::SimpleFeatures::LineString
     end
 
     def distance
-      departure.euclidian_distance(arrival)
+      departure.spherical_distance(arrival)
     end
 
     def to_s
@@ -186,8 +186,16 @@ class GeoRuby::SimpleFeatures::LineString
       scalar_product / square_of_segment_distance
     end
 
+    # def scalar_product
+    #   (target.x-departure.x)*(arrival.x-departure.x) + (target.y-departure.y)*(arrival.y-departure.y).to_f
+    # end
+
     def scalar_product
-      (target.x-departure.x)*(arrival.x-departure.x) + (target.y-departure.y)*(arrival.y-departure.y).to_f
+      departure_target_metric_delta = departure.metric_delta(target)
+      departure_arrival_metric_delta = departure.metric_delta(arrival)
+
+      departure_target_metric_delta[0]*departure_arrival_metric_delta[0] +
+        departure_target_metric_delta[1]*departure_arrival_metric_delta[1]
     end
     memoize :scalar_product
 
@@ -209,11 +217,11 @@ class GeoRuby::SimpleFeatures::LineString
     memoize :square_of_segment_distance
 
     def segment_distance
-      departure.euclidian_distance arrival
+      segment.distance
     end
 
     def target_distance_from_departure
-      departure.euclidian_distance target
+      departure.spherical_distance target
     end
 
   end
