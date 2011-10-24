@@ -21,5 +21,13 @@ class GeoRuby::SimpleFeatures::Envelope
     Envelope.from_points [lower_corner.to_google, upper_corner.to_google],srid, with_z
   end
 
+  def to_polygon
+    GeoRuby::SimpleFeatures::Polygon.from_coordinates( [ [ [lower_corner.x, lower_corner.y], [lower_corner.x, upper_corner.y], [upper_corner.x, upper_corner.y], [upper_corner.x, lower_corner.y] ] ] ) 
+  end
+
+  def to_rgeo
+    self.to_polygon.to_rgeo
+  end
+
 end
       

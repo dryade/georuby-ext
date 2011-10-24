@@ -48,6 +48,10 @@ def linear_ring(*points)
   GeoRuby::SimpleFeatures::LinearRing.from_points(points, points.first.srid)
 end
 
+def envelope(lower_corner, upper_corner)
+  GeoRuby::SimpleFeatures::Envelope.from_points([lower_corner, upper_corner], lower_corner.srid)
+end
+
 def polygon(*points)
   if points.one? and String === points.first
     geometry("POLYGON(#{points})")

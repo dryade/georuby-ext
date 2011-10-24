@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "geokit"
   s.add_runtime_dependency "rgeo"
   s.add_runtime_dependency "proj4rb"
+  s.add_runtime_dependency "json_pure"
 
   s.add_runtime_dependency "activesupport"
 end
