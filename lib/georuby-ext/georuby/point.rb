@@ -165,9 +165,9 @@ class GeoRuby::SimpleFeatures::Point
   end
 
   def to_rgeo
-    RGeo::Geos.factory(:srid => srid).point(x, y)
+    rgeo_factory.point x, y
   end
-
+  
   def to_openlayers
     OpenLayers::LonLat.new x, y
   end

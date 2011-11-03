@@ -11,6 +11,7 @@ require 'georuby-ext/rgeo'
 require 'georuby-ext/geokit'
 require 'georuby-ext/proj4'
 
+require 'georuby-ext/georuby/srid'
 require 'georuby-ext/georuby/geometry'
 require 'georuby-ext/georuby/point'
 require 'georuby-ext/georuby/line_string'

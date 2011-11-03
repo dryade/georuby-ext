@@ -24,4 +24,9 @@ class GeoRuby::SimpleFeatures::Geometry
     end unless geometries.blank?
   end
 
+  def srid_instance
+    @srid_instance ||= GeoRuby::SimpleFeatures::Srid.new(srid)
+  end
+  delegate :rgeo_factory, :to => :srid_instance
+
 end

@@ -58,7 +58,7 @@ class GeoRuby::SimpleFeatures::Polygon
   end
 
   def to_rgeo
-    RGeo::Geos::factory(:srid => srid).polygon(rings.first.to_rgeo)
+    rgeo_factory.polygon(rings.first.to_rgeo)
   end  
 
   def change(options)

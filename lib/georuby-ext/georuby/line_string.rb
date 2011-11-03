@@ -26,8 +26,8 @@ class GeoRuby::SimpleFeatures::LineString
   end
   
   def to_rgeo
-    RGeo::Geos::factory(:srid => srid).line_string(points.collect(&:to_rgeo))
-  end
+    rgeo_factory.line_string(points.collect(&:to_rgeo))
+   end
 
   def side_count
     size - 1
