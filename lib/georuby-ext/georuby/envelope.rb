@@ -5,6 +5,18 @@ class GeoRuby::SimpleFeatures::Envelope
       (lower_corner.y...upper_corner.y).include?(point.y) 
   end
 
+  def overlaps?(bound)
+    contains_point?(bound.upper_corner) or contains_point?(bound.lower_corner) or bound.contains_point?(upper_corner) or bound.contains_point?(lower_corner)   
+  end
+
+  def self.bounds(geometries)
+    return nil if geometries.blank?
+
+    geometries.inject(geometries.first.envelope) do |envelope, geometry|
+      envelope.extend!(geometry.envelope)
+    end
+  end
+
   alias_method :contains?, :contains_point?
 
   def sql_box

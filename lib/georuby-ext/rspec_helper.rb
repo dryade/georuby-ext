@@ -21,11 +21,15 @@ def geometry(text, srid = 4326)
 end
 
 def point(x=0.0, y=0.0, srid = 4326)
-  GeoRuby::SimpleFeatures::Point.from_x_y x, y, srid
+  if String === x
+    geometry("POINT(#{x})")
+  else
+    GeoRuby::SimpleFeatures::Point.from_x_y x, y, srid
+  end
 end
 
 def points(text)
-  text.split(",").collect { |definition| geometry "POINT(#{definition})" }
+  text.split(",").collect { |definition| point definition }
 end
 
 def line_string(*points)
@@ -49,6 +53,9 @@ def linear_ring(*points)
 end
 
 def envelope(lower_corner, upper_corner)
+  lower_corner = point(lower_corner) if String === lower_corner
+  upper_corner = point(upper_corner) if String === upper_corner
+
   GeoRuby::SimpleFeatures::Envelope.from_points([lower_corner, upper_corner], lower_corner.srid)
 end
 

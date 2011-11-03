@@ -29,4 +29,6 @@ class GeoRuby::SimpleFeatures::Geometry
   end
   delegate :rgeo_factory, :to => :srid_instance
 
+  alias_method :bounds, :envelope
+
 end
