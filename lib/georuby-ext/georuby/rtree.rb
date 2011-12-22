@@ -44,7 +44,6 @@ module GeoRuby
       end
 
       def slices
-        puts slice_size
         [].tap do |slices|
           sort_x.each_slice(slice_size) do |slice_elements|
             slices << Slice.new(slice_elements, node_size)
