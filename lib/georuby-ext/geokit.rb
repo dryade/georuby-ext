@@ -1,5 +1,3 @@
-require 'active_support/deprecation'
-
 module GeoKit
   class LatLng
 

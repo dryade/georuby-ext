@@ -20,17 +20,17 @@ describe GeoRuby::SimpleFeatures::MultiLineString do
 
   describe "interpolate_point" do
     
-    # context "examples" do
+    context "examples" do
 
-    #   it "should find 0.5 at (2,0) between 0,0 and 4,0" do
-    #     multi_line_string("(0 0,4 0)").interpolate_point(0.5).should == point(2,0)
-    #   end
+      it "should find 0.5 at (2,0) between 0,0 and 4,0" do
+        multi_line_string("(0 0,4 0)").interpolate_point(0.5).should == point(2,0)
+      end
 
-    #   it "should find 1.5 at (2,0) for (0,4)...(0,1) and (0,0)...(4,0)" do
-    #     multi_line_string("(0 4,0 1),(0 0,4 0)").interpolate_point(1.5).should == point(2,0)
-    #   end
+      it "should find 1.5 at (2,0) for (0,4)...(0,1) and (0,0)...(4,0)" do
+        multi_line_string("(0 4,0 1),(0 0,4 0)").interpolate_point(1.5).should == point(2,0)
+      end
       
-    # end
+    end
 
   end
 

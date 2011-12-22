@@ -1,6 +1,3 @@
-require 'active_support/memoizable'
-require 'active_support/core_ext/module/delegation'
-
 class GeoRuby::SimpleFeatures::MultiLineString
 
   alias_method :lines, :geometries
@@ -12,7 +9,9 @@ class GeoRuby::SimpleFeatures::MultiLineString
 
   def interpolate_point(location)
     line_index, line_location = location.to_i, location % 1
-    lines[line_index].interpolate_point(line_location)
+    if line = lines[line_index]
+      line.interpolate_point(line_location)
+    end
   end
 
   def nearest_locator(target)

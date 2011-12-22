@@ -1,5 +1,3 @@
-require 'active_support/core_ext/object/blank'
-
 class GeoRuby::SimpleFeatures::Point
 
   # Earth radius in kms
