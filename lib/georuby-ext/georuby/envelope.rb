@@ -30,7 +30,7 @@ class GeoRuby::SimpleFeatures::Envelope
   end
 
   def to_google
-    Envelope.from_points [lower_corner.to_google, upper_corner.to_google],srid, with_z
+    GeoRuby::SimpleFeatures::Envelope.from_points [lower_corner.to_google, upper_corner.to_google], 900913, with_z
   end
 
   def to_polygon
