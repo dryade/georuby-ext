@@ -71,6 +71,20 @@ describe GeoRuby::SimpleFeatures::LineString::PointLocator do
   def locator(target, departure, arrival)
     GeoRuby::SimpleFeatures::LineString::PointLocator.new target, departure, arrival
   end
+
+  describe "distance_from_segment" do
+
+    it "should be zero if target is the segment departure" do
+      departure = point(0, 0)
+      locator(departure, departure, p(1,1)).distance_from_segment.should be_zero
+    end
+
+    it "should be zero if target is the segment arrival" do
+      arrival = point(0, 0)
+      locator(arrival, p(1,1), arrival).distance_from_segment.should be_zero
+    end
+
+  end
   
   context "examples" do
 

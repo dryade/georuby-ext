@@ -33,7 +33,7 @@ class GeoRuby::SimpleFeatures::Point
   def ==(other)
     other and 
       other.respond_to?(:lat) and other.respond_to?(:lng) and
-      spherical_distance(other) < 10e-3
+      (other.respond_to?(:srid) and srid == other.srid) ? (lat == other.lat and lng == other.lng) : (spherical_distance(other) < 10e-3)
   end
 
   def spherical_distance_with_srid_support(other)

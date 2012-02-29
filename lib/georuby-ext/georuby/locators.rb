@@ -75,14 +75,17 @@ class GeoRuby::SimpleFeatures::LineString
     segments.collect { |segment| segment.locator(point) }
   end
 
-  def segments
+  def segments_without_cache
     previous_point = nil
     distance_from_departure = 0
 
+    
     points.inject([]) do |segments, point|
       Segment.new(previous_point, point).tap do |segment|
         segment.line = self
-        segment.line_distance_at_departure = segments.sum(&:distance)
+        segment.line_distance_at_departure = distance_from_departure
+
+        distance_from_departure += segment.distance
         
         segments << segment
       end if previous_point
@@ -91,6 +94,11 @@ class GeoRuby::SimpleFeatures::LineString
       segments
     end
   end
+
+  def segments_with_cache
+    @segments ||= segments_without_cache
+  end
+  alias_method :segments, :segments_with_cache
 
   def interpolate_point(location)
     return points.last if location >= 1
@@ -137,7 +145,7 @@ class GeoRuby::SimpleFeatures::LineString
     end
 
     def distance
-      departure.spherical_distance(arrival)
+      @distance ||= departure.spherical_distance(arrival)
     end
 
     def to_s
@@ -172,6 +180,8 @@ class GeoRuby::SimpleFeatures::LineString
     end
 
     def distance_from_segment
+      return 0 if [segment.departure, segment.arrival].include?(target)
+        
       sin_angle * target_distance_from_departure
     end
 
@@ -207,7 +217,7 @@ class GeoRuby::SimpleFeatures::LineString
     end
 
     def cos_angle
-      scalar_product / segment_distance / target_distance_from_departure
+      [-1, [1, scalar_product / segment_distance / target_distance_from_departure].min].max
     end
 
     def square_of_segment_distance
