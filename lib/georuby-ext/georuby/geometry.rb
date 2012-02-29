@@ -18,6 +18,10 @@ class GeoRuby::SimpleFeatures::Geometry
     project_to 900913
   end
 
+  def to_geometry
+    self
+  end
+
   def self.srid!(geometries)
     geometries.first.srid.tap do |srid|
       raise "SRIDs are not uniq in #{geometries.inspect}" if geometries.any? { |geometry| geometry.srid != srid }
@@ -30,5 +34,20 @@ class GeoRuby::SimpleFeatures::Geometry
   delegate :rgeo_factory, :to => :srid_instance
 
   alias_method :bounds, :envelope
+
+  def self.to_kml(*geometries)
+    <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Document>
+      <Placemark>
+      <MultiGeometry>
+      #{geometries.map(&:kml_representation).join("\n")}
+      </MultiGeometry>
+    </Placemark>
+    </Document>
+</kml>
+EOF
+  end
 
 end

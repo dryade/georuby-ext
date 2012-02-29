@@ -46,4 +46,8 @@ class GeoRuby::SimpleFeatures::LineString
     GeoRuby::SimpleFeatures::LinearRing.from_points points, srid, with_z, with_m
   end
 
+  def to_kml
+    GeoRuby::SimpleFeatures::Geometry.to_kml self
+  end
+
 end
