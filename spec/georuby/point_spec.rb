@@ -187,8 +187,8 @@ describe GeoRuby::SimpleFeatures::Point do
     end
 
     it "should return a Point projected into the target srid" do
-      tour_eiffel_in_google.project_to(tour_eiffel_in_wgs84.srid).should == tour_eiffel_in_wgs84
-      tour_eiffel_in_wgs84.project_to(tour_eiffel_in_google.srid).should == tour_eiffel_in_google
+      tour_eiffel_in_google.project_to(tour_eiffel_in_wgs84.srid).should be_close_to tour_eiffel_in_wgs84
+      tour_eiffel_in_wgs84.project_to(tour_eiffel_in_google.srid).should be_close_to tour_eiffel_in_google
     end
 
   end

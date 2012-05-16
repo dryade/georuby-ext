@@ -104,6 +104,10 @@ class GeoRuby::SimpleFeatures::Point
      [x,y,z,srid] == [other.x, other.y, other.z, other.srid]
   end
 
+  def close_to?(other)
+    spherical_distance(other) < 10e-3
+  end
+
   def hash
     [x,y,z,srid].hash
   end

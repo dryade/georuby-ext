@@ -7,7 +7,10 @@ describe  GeoRuby::SimpleFeatures::MultiPolygon do
     let(:multi_polygon_wgs84) { geometry "MULTIPOLYGON(((0 0,0 1,1 0,0 0)))" } 
     
     it "should return a polygon in wgs84 coordinates" do
-      multi_polygon_google.to_wgs84.should == multi_polygon_wgs84
+      [multi_polygon_google.to_wgs84.points, multi_polygon_wgs84.points].transpose.each{ |p1,p2|
+        p1.x.should be_within(0.0000001).of(p2.x) 
+        p1.y.should be_within(0.0000001).of(p2.y)
+      }
     end
 
     it "should return a multi_polygon with wgs84 srid" do
