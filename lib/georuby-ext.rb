@@ -1,7 +1,7 @@
+require 'ffi-proj4'
 require 'geo_ruby'
 require 'geokit'
 require 'rgeo'
-require 'proj4'
 
 require 'active_support/core_ext/enumerable'
 require 'active_support/core_ext/module/delegation'

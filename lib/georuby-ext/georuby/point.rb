@@ -152,7 +152,7 @@ class GeoRuby::SimpleFeatures::Point
   def project_to(target_srid)
     return self if srid == target_srid
 
-    self.class.from_pro4j projection.transform(Proj4::Projection.for_srid(target_srid), to_proj4), target_srid
+    self.class.from_pro4j projection.transform(Proj4::Projection.for_srid(target_srid), to_proj4.x, to_proj4.y), target_srid
   end
 
   def to_proj4(ratio = nil)

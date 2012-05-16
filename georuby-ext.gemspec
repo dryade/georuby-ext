@@ -20,12 +20,14 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake"
   s.add_development_dependency "guard"
+  s.add_development_dependency "guard-rspec"      
+  s.add_development_dependency "guard-bundler"
   s.add_development_dependency "rcov"
 
   s.add_runtime_dependency "georuby"
   s.add_runtime_dependency "geokit"
-  s.add_runtime_dependency "rgeo", "~> 0.3.13"
-  s.add_runtime_dependency "proj4rb"
+  s.add_runtime_dependency "rgeo", "~> 0.3.13"  
+  s.add_runtime_dependency "ffi-geos", "~> 0.0.4"
   s.add_runtime_dependency "json_pure"
 
   s.add_runtime_dependency "activesupport"

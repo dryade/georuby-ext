@@ -92,7 +92,7 @@ describe GeoRuby::SimpleFeatures::Point do
     end
 
     it "should have the same z" do
-      subject.to_proj4.z.should == subject.z
+      subject.to_proj4.z.should == nil
     end
 
   end
