@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "georuby"
   s.add_runtime_dependency "geokit"
-  s.add_runtime_dependency "rgeo", "0.3.8"  
+  s.add_runtime_dependency "rgeo", "~> 0.3.8"  
   s.add_runtime_dependency "ffi-geos", "~> 0.0.4"
   s.add_runtime_dependency "json_pure"
 
