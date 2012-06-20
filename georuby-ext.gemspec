@@ -10,8 +10,6 @@ Gem::Specification.new do |s|
   s.summary     = %q{Extension to Ruby geometry libraries}
   s.description = %q{Use together GeoRuby, rgeo, geokit, proj4j (and others)}
 
-  s.rubyforge_project = "georuby-ext"
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
@@ -26,7 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency "georuby"
   s.add_runtime_dependency "geokit"
-  s.add_runtime_dependency "rgeo", "~> 0.3.13"  
+  s.add_runtime_dependency "rgeo", "0.3.8"  
   s.add_runtime_dependency "ffi-geos", "~> 0.0.4"
   s.add_runtime_dependency "json_pure"
 
