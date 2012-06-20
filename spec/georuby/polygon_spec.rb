@@ -75,8 +75,6 @@ describe GeoRuby::SimpleFeatures::Polygon do
     let(:georuby_polygon){ polygon(point(0,0), point(0,2), point(2,2), point(2,0), point(0,0))}      
 
     it "should return a polygon RGeo::Feature::Polygon" do
-      
-
       georuby_polygon.to_rgeo.should == result
     end
   end

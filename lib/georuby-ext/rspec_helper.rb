@@ -75,6 +75,10 @@ def rgeo_point(x = 0, y = 0, srid = 4326)
   RGeo::Geos.factory(:srid => srid).point(x, y)
 end
 
+def rgeo_multi_polygon(polygons, srid = 4326)
+  RGeo::Geos.factory(:srid => srid).multi_polygon(polygons)
+end
+
 def rgeometry(text, srid = 4326)
   RGeo::Geos.factory(:srid => srid).parse_wkt text
 end

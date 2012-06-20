@@ -12,12 +12,12 @@ module GeoKit
 
     def wgs84_to_google
       ActiveSupport::Deprecation.warn "use Point geometry which supports srid"
-      self.class.from_pro4j Proj4::Projection.wgs84.transform Proj4::Projection.google, self.proj4_point(Math::PI / 180)
+      self.class.from_pro4j Proj4::Projection.wgs84.transform Proj4::Projection.google, self.proj4_point(Math::PI / 180).x, self.proj4_point(Math::PI / 180).y
     end
 
     def google_to_wgs84
       ActiveSupport::Deprecation.warn "use Point geometry which supports srid"
-      self.class.from_pro4j Proj4::Projection.google.transform(Proj4::Projection.wgs84, self.proj4_point), 180 / Math::PI  
+      self.class.from_pro4j Proj4::Projection.google.transform(Proj4::Projection.wgs84, self.proj4_point.x, self.proj4_point.y), 180 / Math::PI 
     end
 
     def proj4_point(ratio = 1)

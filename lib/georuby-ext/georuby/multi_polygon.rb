@@ -10,4 +10,15 @@ class GeoRuby::SimpleFeatures::MultiPolygon
   def polygons
     self.geometries.flatten
   end
+
+  def difference(georuby_multi_polygon)
+    factory = RGeo::Geos::Factory.create
+    multi_polygon_difference = self.to_rgeo.difference(georuby_multi_polygon.to_rgeo)
+    multi_polygon_difference.to_georuby
+  end
+
+  def to_rgeo
+    rgeo_factory.multi_polygon(polygons.collect(&:to_rgeo))
+  end
+
 end
