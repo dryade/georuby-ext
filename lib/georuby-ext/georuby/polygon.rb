@@ -57,6 +57,12 @@ class GeoRuby::SimpleFeatures::Polygon
     polygon_intersection.to_georuby
   end
 
+  def difference(georuby_polygon)
+    factory = RGeo::Geos::Factory.create
+    polygon_difference = self.to_rgeo.difference(georuby_polygon.to_rgeo)
+    polygon_difference.to_georuby
+  end
+
   def to_rgeo
     rgeo_factory.polygon(rings.first.to_rgeo)
   end  

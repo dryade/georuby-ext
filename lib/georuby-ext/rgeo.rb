@@ -22,6 +22,11 @@ class RGeo::Geos::MultiPolygonImpl
   end
 end
 
+class RGeo::Geos::GeometryCollectionImpl
+  def to_georuby
+    GeoRuby::SimpleFeatures::GeometryCollection.from_geometries collect(&:to_georuby), srid
+  end
+end
 
 class RGeo::Geos::FFIPointImpl
   def to_georuby
