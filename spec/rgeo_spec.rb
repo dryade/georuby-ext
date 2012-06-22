@@ -65,7 +65,6 @@ describe RGeo::Geos::MultiPolygonImpl do
     end
 
     it "should return a MultiPolygon with the same information" do
-      puts subject.inspect
       subject.to_georuby.should == geometry("MULTIPOLYGON (((30 20, 10 40, 45 40, 30 20)), ((15 5, 40 10, 10 20, 5 10, 15 5)))")
     end
 

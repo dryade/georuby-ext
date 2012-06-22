@@ -12,7 +12,7 @@ end
 
 class RGeo::Geos::PolygonImpl
   def to_georuby
-    GeoRuby::SimpleFeatures::Polygon.from_linear_rings [exterior_ring.to_georuby], srid
+    GeoRuby::SimpleFeatures::Polygon.from_linear_rings [exterior_ring.to_georuby] + interior_rings.map(&:to_georuby), srid
   end
 end
 
@@ -42,7 +42,7 @@ end
 
 class RGeo::Geos::FFIPolygonImpl
   def to_georuby
-    GeoRuby::SimpleFeatures::Polygon.from_linear_rings [exterior_ring.to_georuby], srid
+    GeoRuby::SimpleFeatures::Polygon.from_linear_rings [exterior_ring.to_georuby] + interior_rings.map(&:to_georuby), srid
   end
 end
 
