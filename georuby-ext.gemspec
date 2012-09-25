@@ -15,13 +15,12 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec", "2.11.0"
   s.add_development_dependency "rake"
-  s.add_development_dependency "guard"
+  s.add_development_dependency "guard", "1.3.3"  
   s.add_development_dependency "guard-rspec"      
   s.add_development_dependency "guard-bundler"
-  s.add_development_dependency "rcov"
-  s.add_development_dependency "rdoc" 
+  s.add_development_dependency "rcov" 
 
   s.add_runtime_dependency "georuby", "1.9.8"  
   s.add_runtime_dependency "dbf"
