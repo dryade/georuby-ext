@@ -47,7 +47,7 @@ describe  GeoRuby::SimpleFeatures::MultiPolygon do
     let(:rg_multi_polygon) { rgeometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)),  ((0 2, 0 3, 3 3, 2 2, 0 2)))") }   
 
     it "should return an rgeo multi polygons" do
-      factory = RGeo::Geos::Factory.create      
+      factory = RGeo::Geos::FFIFactory.new      
       g_multi_polygon.to_rgeo.should == rg_multi_polygon
     end
   end

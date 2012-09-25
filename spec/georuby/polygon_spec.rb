@@ -69,12 +69,12 @@ describe GeoRuby::SimpleFeatures::Polygon do
 
   describe "to_rgeo" do
     
-    let(:result) {factory = RGeo::Geos::Factory.create
+    let(:result) {factory = RGeo::Geos::FFIFactory.new
       factory.polygon(factory.line_string([factory.point(0, 0), factory.point(0, 2), factory.point(2, 2), factory.point(2, 0),  factory.point(0, 0)]))}
     
     let(:georuby_polygon){ polygon(point(0,0), point(0,2), point(2,2), point(2,0), point(0,0))}      
 
-    it "should return a polygon RGeo::Feature::Polygon" do
+    it "should return a polygon RGeo::Feature::FFIPolygon" do
       georuby_polygon.to_rgeo.should == result
     end
   end

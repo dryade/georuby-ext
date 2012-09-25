@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe RGeo::Geos::PointImpl do
+describe RGeo::Geos::FFIPointImpl do
 
   subject { rgeo_point }
 
@@ -18,7 +18,7 @@ describe RGeo::Geos::PointImpl do
 
 end
 
-describe RGeo::Geos::LineImpl do
+describe RGeo::Geos::FFILineImpl do
 
   subject { rgeometry("LINESTRING(0 0, 1 1)") }
 
@@ -36,7 +36,7 @@ describe RGeo::Geos::LineImpl do
 
 end
 
-describe RGeo::Geos::PolygonImpl do
+describe RGeo::Geos::FFIPolygonImpl do
 
   subject { rgeometry("POLYGON((0 0,1 0,0 1,0 0))") }
 
@@ -54,7 +54,7 @@ describe RGeo::Geos::PolygonImpl do
 
 end
 
-describe RGeo::Geos::MultiPolygonImpl do
+describe RGeo::Geos::FFIMultiPolygonImpl do
 
   subject { rgeometry("MULTIPOLYGON (((30 20, 10 40, 45 40, 30 20)), ((15 5, 40 10, 10 20, 5 10, 15 5)))") }
 

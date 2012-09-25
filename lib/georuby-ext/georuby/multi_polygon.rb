@@ -12,13 +12,13 @@ class GeoRuby::SimpleFeatures::MultiPolygon
   end
 
   def difference(georuby_multi_polygon)
-    factory = RGeo::Geos::Factory.create
-    multi_polygon_difference = self.to_rgeo.difference(georuby_multi_polygon.to_rgeo)
+    factory = RGeo::Geos::FFIFactory.new
+    multi_polygon_difference = georuby_multi_polygon.present? ? self.to_rgeo.difference(georuby_multi_polygon.to_rgeo) : self.to_rgeo
     multi_polygon_difference.to_georuby
   end
 
   def to_rgeo
-    rgeo_factory.multi_polygon(polygons.collect(&:to_rgeo))
+    rgeo_factory.multi_polygon(polygons.uniq.collect(&:to_rgeo))
   end
 
 end

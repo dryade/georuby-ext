@@ -30,7 +30,7 @@ class GeoRuby::SimpleFeatures::Polygon
   end
 
   def self.union(georuby_polygons)
-    factory = RGeo::Geos::Factory.create
+    factory = RGeo::Geos::FFIFactory.new
     if !georuby_polygons.empty?
       polygon_union = georuby_polygons.first.to_rgeo
       georuby_polygons.shift
@@ -44,7 +44,7 @@ class GeoRuby::SimpleFeatures::Polygon
    end
 
   def self.intersection(georuby_polygons)
-    factory = RGeo::Geos::Factory.create
+    factory = RGeo::Geos::FFIFactory.new
     if !georuby_polygons.empty?
       polygon_intersection = georuby_polygons.first.to_rgeo
       georuby_polygons.shift
@@ -58,7 +58,7 @@ class GeoRuby::SimpleFeatures::Polygon
   end
 
   def difference(georuby_polygon)
-    factory = RGeo::Geos::Factory.create
+    factory = RGeo::Geos::FFIFactory.new
     polygon_difference = self.to_rgeo.difference(georuby_polygon.to_rgeo)
     polygon_difference.to_georuby
   end

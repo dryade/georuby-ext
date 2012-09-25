@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe GeoRuby::SimpleFeatures::LinearRing do
-  let(:result) {factory = RGeo::Geos::Factory.create
+  let(:result) {factory = RGeo::Geos::FFIFactory.new
     factory.linear_ring([factory.point(0, 0), factory.point(2, 1), factory.point(3, 2), factory.point(0, 0)])} 
   
   describe "to_rgeo" do
