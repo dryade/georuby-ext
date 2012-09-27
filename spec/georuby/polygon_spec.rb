@@ -69,14 +69,13 @@ describe GeoRuby::SimpleFeatures::Polygon do
 
   describe "to_rgeo" do
     
-    let(:result) {factory = RGeo::Geos::FFIFactory.new
-      factory.polygon(factory.line_string([factory.point(0, 0), factory.point(0, 2), factory.point(2, 2), factory.point(2, 0),  factory.point(0, 0)]))}
-    
-    let(:georuby_polygon){ polygon(point(0,0), point(0,2), point(2,2), point(2,0), point(0,0))}      
+    let(:rgeo_polygon) { rgeometry("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))") }    
+    let(:geo_polygon){ geometry("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))") }      
 
     it "should return a polygon RGeo::Feature::FFIPolygon" do
-      georuby_polygon.to_rgeo.should == result
+      geo_polygon.to_rgeo.should == rgeo_polygon
     end
+
   end
   
   describe "centroid" do
@@ -90,25 +89,26 @@ describe GeoRuby::SimpleFeatures::Polygon do
 
 
   describe "union" do
-    
-    let(:result){ polygon(point(0.0,0.0), point(0.0,2.0), point(0.0,4.0), point(2.0,4.0), point(2.0,2.0), point(2.0,0.0), point(0.0,0.0))}      
-    let(:georuby_polygon){ polygon(point(0.0,0.0), point(0.0,2.0), point(2.0,2.0), point(2.0,0.0), point(0.0,0.0))}      
-    let(:georuby_polygon2){ polygon(point(0.0,0.0), point(0.0,4.0), point(2.0,4.0), point(2.0,0.0), point(0.0,0.0))}      
+     
+    let(:georuby_polygon) { geometry("POLYGON((0 0, 0 2, 2 2, 2 0, 0 0))") }            
 
-    it "should return the same polygon than in input" do
-      test = GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon])
-      GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon]).text_representation.should == georuby_polygon.text_representation
+    it "should return the same polygon than in input" do   
+      GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon]).should == georuby_polygon
     end
     
-    it "should return union of polygons" do
+    it "should return union of 2 polygons which have a common side" do
+      result =  geometry("POLYGON((0.0 0.0,0.0 2.0,0.0 4.0,2.0 4.0,2.0 2.0,2.0 0.0,0.0 0.0))")
+      georuby_polygon2 = geometry("POLYGON((0 2, 0 4, 2 4, 2 2, 0 2))")
       GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon2]).text_representation.should == result.text_representation
     end
+
+    
     
   end
 
   describe "intersect" do
-    let(:georuby_polygon){ polygon(point(0.0,0.0), point(0.0,2.0), point(2.0,2.0), point(2.0,0.0), point(0.0,0.0))}      
-    let(:georuby_polygon2){ polygon(point(0.0,0.0), point(0.0,4.0), point(2.0,4.0), point(2.0,0.0), point(0.0,0.0))}   
+    let(:georuby_polygon){ polygon("(0 0,0 2,2 2,2 0)")  }      
+    let(:georuby_polygon2){ polygon("(0 0,0 4,2 4,2 0)") }   
     
     it "should return intersect of polygons" do
       test = GeoRuby::SimpleFeatures::Polygon.intersection([georuby_polygon, georuby_polygon2])

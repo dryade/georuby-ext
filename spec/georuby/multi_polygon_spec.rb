@@ -39,15 +39,29 @@ describe  GeoRuby::SimpleFeatures::MultiPolygon do
       g_multi_polygon2 = geometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)))") 
       g_multi_polygon.difference(g_multi_polygon2).should == polygon("(0 2, 0 3, 3 3, 2 2)")
     end
+
+    it "should return a multi polygon if there's more than one polygon left" do
+      g_multi_polygon2 = geometry("MULTIPOLYGON (((0.25 0.25, 0.25 0.5, 0.75 0.5, 0.75 0.25, 0.25 0.25)))") 
+      g_multi_polygon.difference(g_multi_polygon2).should == geometry("MULTIPOLYGON(((0.0 0.0,0.0 1.0,1.0 1.0,1.0 0.0,0.0 0.0),(0.25 0.25,0.75 0.25,0.75 0.5,0.25 0.5,0.25 0.25)),((0.0 2.0,0.0 3.0,3.0 3.0,2.0 2.0,0.0 2.0)))")
+    end
     
+    it "should return the same polygon if the polygon to substract isn't inside the polygon" do
+      g_multi_polygon2 = geometry("MULTIPOLYGON (((0 0, 0 -1, -1 -1, -1 0, 0 0)))") 
+      g_multi_polygon.difference(g_multi_polygon2).should == geometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)),  ((0 2, 0 3, 3 3, 2 2, 0 2)))")
+    end
+
+    it "should return a multi polygon" do
+      g_multi_polygon2 = geometry("MULTIPOLYGON ( ((0 0, 0 3, 3 3, 3 0, 0 0)), ((6 2, 6 3, 7 3, 7 2, 6 2)) )") 
+      g_multi_polygon2.difference(g_multi_polygon).should == geometry("MULTIPOLYGON ( ((0 1, 0 2, 2 2, 3 3, 3 0, 1 0, 1 1, 0 1)) ,  ((6 2, 6 3, 7 3, 7 2, 6 2)))")
+    end
+
   end
 
   describe "#to_rgeo" do
-    let(:g_multi_polygon) { geometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)),  ((0 2, 0 3, 3 3, 2 2, 0 2)))") } 
-    let(:rg_multi_polygon) { rgeometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)),  ((0 2, 0 3, 3 3, 2 2, 0 2)))") }   
+    let(:g_multi_polygon) { geometry("MULTIPOLYGON(((0.0 0.0,0.0 1.0,1.0 1.0,1.0 0.0,0.0 0.0),(0.25 0.25,0.75 0.25,0.75 0.5,0.25 0.5,0.25 0.25)),((0.0 2.0,0.0 3.0,3.0 3.0,2.0 2.0,0.0 2.0)))") } 
+    let(:rg_multi_polygon) { rgeometry("MULTIPOLYGON(((0.0 0.0,0.0 1.0,1.0 1.0,1.0 0.0,0.0 0.0),(0.25 0.25,0.75 0.25,0.75 0.5,0.25 0.5,0.25 0.25)),((0.0 2.0,0.0 3.0,3.0 3.0,2.0 2.0,0.0 2.0)))") }   
 
-    it "should return an rgeo multi polygons" do
-      factory = RGeo::Geos::FFIFactory.new      
+    it "should return an rgeo multi polygons" do     
       g_multi_polygon.to_rgeo.should == rg_multi_polygon
     end
   end

@@ -13,6 +13,11 @@ end
 class RGeo::Geos::FFILineStringImpl
   def to_georuby
     GeoRuby::SimpleFeatures::LineString.from_points points.collect(&:to_georuby), srid
+  end  
+
+  def to_linear_ring
+    linear_ring_points = points.first == points.last ? points : points.push(points.first)
+    factory.linear_ring linear_ring_points
   end
 end
 
@@ -20,11 +25,24 @@ class RGeo::Geos::FFILinearRingImpl
   def to_georuby
     GeoRuby::SimpleFeatures::LinearRing.from_points points.collect(&:to_georuby), srid
   end
+
+  def to_linear_ring
+    linear_ring_points = points.first == points.last ? points : points.push(points.first)
+    factory.linear_ring linear_ring_points
+  end
 end
 
 class RGeo::Geos::FFIPolygonImpl
+  def rings
+    [exterior_ring] + interior_rings
+  end
+
+  def linear_rings
+    rings.collect(&:to_linear_ring)
+  end
+
   def to_georuby
-    GeoRuby::SimpleFeatures::Polygon.from_linear_rings [exterior_ring.to_georuby] + interior_rings.map(&:to_georuby), srid
+    GeoRuby::SimpleFeatures::Polygon.from_linear_rings linear_rings.collect(&:to_georuby), srid
   end
 end
 

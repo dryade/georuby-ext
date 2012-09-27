@@ -1,4 +1,3 @@
-
 class GeoRuby::SimpleFeatures::Polygon
 
   def self.circle(center, radius, sides_number = 24)
@@ -22,7 +21,7 @@ class GeoRuby::SimpleFeatures::Polygon
   def perimeter
     rings.sum(&:spherical_distance)
   end
-
+  
   def centroid
     if rgeo_polygon = to_rgeo
       rgeo_polygon.centroid.to_georuby
@@ -30,21 +29,19 @@ class GeoRuby::SimpleFeatures::Polygon
   end
 
   def self.union(georuby_polygons)
-    factory = RGeo::Geos::FFIFactory.new
-    if !georuby_polygons.empty?
-      polygon_union = georuby_polygons.first.to_rgeo
-      georuby_polygons.shift
-    end
+    return nil if georuby_polygons.empty?             
+
+    rgeo_polygons = georuby_polygons.collect(&:to_rgeo)      
+    rgeo_polygon_union = rgeo_polygons.first    
      
-    georuby_polygons.each do |polygon|
-       polygon_union = polygon_union.union(polygon.to_rgeo)
+    rgeo_polygons[1..(rgeo_polygons.size - 1)].each do |rgeo_polygon|
+       rgeo_polygon_union = rgeo_polygon_union.union(rgeo_polygon)
     end
     
-    polygon_union.to_georuby
-   end
+    rgeo_polygon_union.to_georuby
+  end
 
   def self.intersection(georuby_polygons)
-    factory = RGeo::Geos::FFIFactory.new
     if !georuby_polygons.empty?
       polygon_intersection = georuby_polygons.first.to_rgeo
       georuby_polygons.shift
@@ -58,13 +55,14 @@ class GeoRuby::SimpleFeatures::Polygon
   end
 
   def difference(georuby_polygon)
-    factory = RGeo::Geos::FFIFactory.new
     polygon_difference = self.to_rgeo.difference(georuby_polygon.to_rgeo)
     polygon_difference.to_georuby
   end
 
   def to_rgeo
-    rgeo_factory.polygon(rings.first.to_rgeo)
+    outer_ring = rings.first.to_rgeo
+    rings.size > 1 ? inner_rings = rings[1..(rings.size - 1)].collect(&:to_rgeo) : inner_rings = nil
+    rgeo_factory.polygon(outer_ring, inner_rings)
   end  
 
   def change(options)
