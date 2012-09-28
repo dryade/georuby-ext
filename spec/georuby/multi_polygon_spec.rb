@@ -28,7 +28,7 @@ describe  GeoRuby::SimpleFeatures::MultiPolygon do
   end
 
   describe "#difference" do    
-    let(:g_multi_polygon) { geometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)),  ((0 2, 0 3, 3 3, 2 2, 0 2)))") } 
+    let(:g_multi_polygon) { geometry("MULTIPOLYGON (((0 0, 0 5, 5 5, 5 0, 0 0)), ((6 1, 6 2, 7 2, 7 1, 6 1)))") } 
     let(:empty_geometry_collection) { GeoRuby::SimpleFeatures::GeometryCollection.from_geometries([], 4326) }
 
     it "should return an empty geometry collection if multi polygons are the same" do
@@ -36,23 +36,23 @@ describe  GeoRuby::SimpleFeatures::MultiPolygon do
     end
 
     it "should return an rgeo polygon if there's only one polygon left' " do
-      g_multi_polygon2 = geometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)))") 
-      g_multi_polygon.difference(g_multi_polygon2).should == polygon("(0 2, 0 3, 3 3, 2 2)")
+      g_multi_polygon2 = geometry("MULTIPOLYGON (((0 0, 0 5, 5 5, 5 0, 0 0)))") 
+      g_multi_polygon.difference(g_multi_polygon2).should == geometry("POLYGON ((6 1, 6 2, 7 2, 7 1, 6 1))") 
     end
 
     it "should return a multi polygon if there's more than one polygon left" do
       g_multi_polygon2 = geometry("MULTIPOLYGON (((0.25 0.25, 0.25 0.5, 0.75 0.5, 0.75 0.25, 0.25 0.25)))") 
-      g_multi_polygon.difference(g_multi_polygon2).should == geometry("MULTIPOLYGON(((0.0 0.0,0.0 1.0,1.0 1.0,1.0 0.0,0.0 0.0),(0.25 0.25,0.75 0.25,0.75 0.5,0.25 0.5,0.25 0.25)),((0.0 2.0,0.0 3.0,3.0 3.0,2.0 2.0,0.0 2.0)))")
+      g_multi_polygon.difference(g_multi_polygon2).should == geometry("MULTIPOLYGON(((0 0, 0 5, 5 5, 5 0, 0 0),(0.25 0.25,0.75 0.25,0.75 0.5,0.25 0.5,0.25 0.25)),((6 1, 6 2, 7 2, 7 1, 6 1)))")
     end
     
     it "should return the same polygon if the polygon to substract isn't inside the polygon" do
       g_multi_polygon2 = geometry("MULTIPOLYGON (((0 0, 0 -1, -1 -1, -1 0, 0 0)))") 
-      g_multi_polygon.difference(g_multi_polygon2).should == geometry("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)),  ((0 2, 0 3, 3 3, 2 2, 0 2)))")
+      g_multi_polygon.difference(g_multi_polygon2).should == geometry("MULTIPOLYGON (((0 0, 0 5, 5 5, 5 0, 0 0)), ((6 1, 6 2, 7 2, 7 1, 6 1)))")
     end
 
-    it "should return a multi polygon" do
-      g_multi_polygon2 = geometry("MULTIPOLYGON ( ((0 0, 0 3, 3 3, 3 0, 0 0)), ((6 2, 6 3, 7 3, 7 2, 6 2)) )") 
-      g_multi_polygon2.difference(g_multi_polygon).should == geometry("MULTIPOLYGON ( ((0 1, 0 2, 2 2, 3 3, 3 0, 1 0, 1 1, 0 1)) ,  ((6 2, 6 3, 7 3, 7 2, 6 2)))")
+    it "should return a multi polygon with 2 holes" do
+      g_multi_polygon2 = geometry("MULTIPOLYGON ( ((1 1, 2 1, 2 2, 1 2, 1 1)), ((3 3, 4 3, 4 4, 3 4, 3 3)) )") 
+      g_multi_polygon.difference(g_multi_polygon2).should == geometry("MULTIPOLYGON ( ((0 0, 0 5, 5 5, 5 0, 0 0), (1 1, 2 1, 2 2, 1 2, 1 1), (3 3, 4 3, 4 4, 3 4, 3 3)), ((6 1, 6 2, 7 2, 7 1, 6 1)) )")
     end
 
   end

@@ -67,12 +67,17 @@ describe GeoRuby::SimpleFeatures::Polygon do
 
   end
 
-  describe "to_rgeo" do
-    
-    let(:rgeo_polygon) { rgeometry("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))") }    
-    let(:geo_polygon){ geometry("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))") }      
+  describe "to_rgeo" do   
 
-    it "should return a polygon RGeo::Feature::FFIPolygon" do
+    it "should return a rgeo polygon" do
+      rgeo_polygon =  rgeometry("POLYGON((0 0, 0 5, 5 5, 5 0, 0 0))")    
+      geo_polygon = geometry("POLYGON((0 0, 0 5, 5 5, 5 0, 0 0))") 
+      geo_polygon.to_rgeo.should == rgeo_polygon
+    end
+
+    it "should return a rgeo polygon with an hole" do
+      rgeo_polygon =  rgeometry("POLYGON((0 0, 0 5, 5 5, 5 0, 0 0), (1 1, 2 1, 2 2, 1 2, 1 1))")    
+      geo_polygon = geometry("POLYGON((0 0, 0 5, 5 5, 5 0, 0 0), (1 1, 2 1, 2 2, 1 2, 1 1) )") 
       geo_polygon.to_rgeo.should == rgeo_polygon
     end
 
@@ -99,10 +104,20 @@ describe GeoRuby::SimpleFeatures::Polygon do
     it "should return union of 2 polygons which have a common side" do
       result =  geometry("POLYGON((0.0 0.0,0.0 2.0,0.0 4.0,2.0 4.0,2.0 2.0,2.0 0.0,0.0 0.0))")
       georuby_polygon2 = geometry("POLYGON((0 2, 0 4, 2 4, 2 2, 0 2))")
-      GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon2]).text_representation.should == result.text_representation
+      GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon2]).should == result
     end
 
-    
+    it "should return 2 polygons which have an area in common" do
+      result =  geometry("POLYGON((0 0,0 1,0 2,0 4,2 4,2 2,2 1,2 0,0 0))")
+      georuby_polygon2 = geometry("POLYGON((0 1, 0 4, 2 4, 2 1, 0 1))")
+      GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon2]).should == result
+    end
+
+    it "should return 2 polygons which have no intersection" do
+      result =  geometry("MULTIPOLYGON( ((0 0, 0 2, 2 2, 2 0, 0 0)), ((3 3, 3 4, 4 4, 4 3, 3 3)) )")
+      georuby_polygon2 = geometry("POLYGON((3 3, 4 3, 4 4, 3 4, 3 3))")
+      GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon2]).should == result
+    end
     
   end
 
@@ -131,6 +146,12 @@ describe GeoRuby::SimpleFeatures::Polygon do
 
     it "should be empty geometry collection if polygon is smaller than the other" do
       georuby_polygon2.difference(georuby_polygon).should == GeoRuby::SimpleFeatures::GeometryCollection.from_geometries([], 4326)
+    end
+
+    it "should return a result if we make difference with a multi polygon" do
+      geo_polygon = geometry("POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0))")
+      geo_multi_polygon = geometry("MULTIPOLYGON ( ((1 1, 2 1, 2 2, 1 2, 1 1)), ((3 3, 4 3, 4 4, 3 4, 3 3)) )")
+      geo_polygon.difference(geo_multi_polygon).should ==  geometry("POLYGON ( ((0 0, 0 5, 5 5, 5 0, 0 0), (1 1, 2 1, 2 2, 1 2, 1 1), (3 3, 4 3, 4 4, 3 4, 3 3)) )")
     end
 
   end
