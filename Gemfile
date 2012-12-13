@@ -10,4 +10,4 @@ group :development do
   end
 end
 
-gem "ffi-proj4", :git => 'git://github.com/dryade/ffi-proj4.git'
+gem "ffi-proj4", :git => 'git://github.com/dark-panda/ffi-proj4.git'
