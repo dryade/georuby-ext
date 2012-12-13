@@ -5,8 +5,8 @@ rvm:
   - jruby-18mode
 
 before_script: 
-  - "sudo apt-get install libproj-dev libgeos-dev libsparsehash-dev libffi-dev "
-script: "rake spec"
+  - "sudo apt-get install build-essential ruby-dev libproj-dev libgeos-dev libffi-dev libsparsehash-dev zlib1g-dev libxslt1-dev libxml2-dev libbz2-dev"
+script: "RAILS_ENV=test bundle exec rake spec"
 notifications:
   recipients:
     - luc.donnet@dryade.net
