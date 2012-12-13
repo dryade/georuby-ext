@@ -11,7 +11,10 @@ require 'active_support/memoizable'
 
 require 'georuby-ext/core_ext'
 
-require 'georuby-ext/rgeo'
+require 'georuby-ext/rgeo/feature/geometry'
+require 'georuby-ext/rgeo/feature/geometry_collection'
+require 'georuby-ext/rgeo/geos/ffi_feature_methods'
+
 require 'georuby-ext/geokit'
 require 'georuby-ext/proj4'
 

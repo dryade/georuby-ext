@@ -11,7 +11,7 @@ class GeoRuby::SimpleFeatures::Srid
   end
  
   def rgeo_factory
-    @rgeo_factory ||= RGeo::Geos::factory( :native_interface => :ffi, :srid => srid )
+    @rgeo_factory ||= RGeo::Geos.factory(:srid => srid, :wkt_parser => {:support_ewkt => true})
   end
 
 end

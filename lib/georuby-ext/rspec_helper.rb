@@ -71,16 +71,20 @@ def multi_polygon(*polygons)
   GeoRuby::SimpleFeatures::MultiPolygon.from_polygons([polygons], polygons.first.srid)
 end
 
+def rgeo_factory
+  @rgeo_factory ||= RGeo::Geos.factory(:srid => 4326, :wkt_parser => {:support_ewkt => true})
+end
+
 def rgeo_point(x = 0, y = 0, srid = 4326)
-  RGeo::Geos.factory(:srid => srid).point(x, y)
+  rgeo_factory.point(x, y)
 end
 
 def rgeo_multi_polygon(polygons, srid = 4326)
-  RGeo::Geos.factory(:srid => srid).multi_polygon(polygons)
+  rgeo_factory.multi_polygon(polygons)
 end
 
 def rgeometry(text, srid = 4326)
-  RGeo::Geos.factory(:srid => srid).parse_wkt text
+  rgeo_factory.parse_wkt text
 end
 
 def rgeo_line_string(text, srid = 4326)
