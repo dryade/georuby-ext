@@ -122,8 +122,8 @@ describe GeoRuby::SimpleFeatures::Polygon do
   end
 
   describe "intersect" do
-    let(:georuby_polygon){ polygon("(0 0,0 2,2 2,2 0)")  }      
-    let(:georuby_polygon2){ polygon("(0 0,0 4,2 4,2 0)") }   
+    let(:georuby_polygon){ polygon("(0 0,0 2,2 2,2 0,0 0)")  }      
+    let(:georuby_polygon2){ polygon("(0 0,0 4,2 4,2 0,0 0)") }   
     
     it "should return intersect of polygons" do
       test = GeoRuby::SimpleFeatures::Polygon.intersection([georuby_polygon, georuby_polygon2])
@@ -132,15 +132,15 @@ describe GeoRuby::SimpleFeatures::Polygon do
   end
 
   describe "#difference" do
-    let(:georuby_polygon) {  polygon("(0 0,0 2,2 2,2 0)")  }      
-    let(:georuby_polygon2){  polygon("(0 0,0 1,2 1,2 0)") }    
+    let(:georuby_polygon) {  polygon("(0 0,0 2,2 2,2 0,0 0)")  }      
+    let(:georuby_polygon2){  polygon("(0 0,0 1,2 1,2 0,0 0)") }    
     
     it "should be empty geometry collection if polygons are the same" do
       georuby_polygon.difference(georuby_polygon).should == GeoRuby::SimpleFeatures::GeometryCollection.from_geometries([], 4326)
     end
 
-    it "should return  polygon('(0 1,0 2,2 2,2 1)' as result" do
-      result =  polygon("(0 1,0 2,2 2,2 1)")
+    it "should return  polygon('(0 1,0 2,2 2,2 1,0 1)' as result" do
+      result =  polygon("(0 1,0 2,2 2,2 1,0 1)")
       georuby_polygon.difference(georuby_polygon2).should == result
     end
 
@@ -159,7 +159,7 @@ describe GeoRuby::SimpleFeatures::Polygon do
   describe "#==" do
     
     it "should be true when points are same" do
-      geometry("POLYGON((0 0,1 1))").should == geometry("POLYGON((0 0,1 1))")
+      geometry("POLYGON((0 0,0 1,2 1,2 0,0 0))").should == geometry("POLYGON((0 0,0 1,2 1,2 0,0 0))")
     end
 
   end
@@ -167,7 +167,7 @@ describe GeoRuby::SimpleFeatures::Polygon do
   describe "side_count" do
     
     it "should return 3 for a triangle" do
-      polygon("(0 0,1 0,0 1)").side_count.should == 3
+      polygon("(0 0,1 0,0 1,0 0)").side_count.should == 3
     end
 
   end

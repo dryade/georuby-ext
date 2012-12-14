@@ -102,8 +102,8 @@ describe GeoRuby::Rtree::Node do
   describe "bounds" do
 
     it "should return a global bounds of children" do
-      subject.children << polygon("(0 0,1 1,1 0)") 
-      subject.children << polygon("(1 1,2 2,2 0)") 
+      subject.children << polygon("(0 0,1 1,1 0,0 0)") 
+      subject.children << polygon("(1 1,2 2,2 0,1 1)") 
 
       subject.bounds.should == envelope("0 0","2 2")
     end                      
@@ -120,7 +120,7 @@ describe GeoRuby::Rtree::Node do
 
   describe "#containing" do
     bound = envelope("0 0","1 1")
-    let(:children) { [ polygon("(0 0,0 1,1 1,1 0)"), polygon("(0 0,0 2,2 2,2 0)"), polygon("(0 0,0 0.5,0.5 0.5,0.5 0)") ] }
+    let(:children) { [ polygon("(0 0,0 1,1 1,1 0,0 0)"), polygon("(0 0,0 2,2 2,2 0,0 0)"), polygon("(0 0,0 0.5,0.5 0.5,0.5 0,0 0)") ] }
     
     it "should return elements if containing bounds" do
       GeoRuby::Rtree::Node.new(children).containing(bound).should == children

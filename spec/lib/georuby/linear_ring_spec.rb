@@ -21,7 +21,7 @@ describe GeoRuby::SimpleFeatures::LinearRing do
   describe ".from_points" do
     
     it "should be closed even if last point is missing" do
-      GeoRuby::SimpleFeatures::LinearRing.from_points(points("0 0,1 1")).should be_closed
+      GeoRuby::SimpleFeatures::LinearRing.from_points(points("0 0,1 1,0 0")).should be_closed
     end
 
     it "should accept already closed line" do
@@ -33,7 +33,7 @@ describe GeoRuby::SimpleFeatures::LinearRing do
   describe ".from_coordinates" do
     
     it "should be closed even if last point is missing" do
-      GeoRuby::SimpleFeatures::LinearRing.from_coordinates([[0,0],[1,1]]).should be_closed
+      GeoRuby::SimpleFeatures::LinearRing.from_coordinates([[0,0],[1,1],[0,0]]).should be_closed
     end
 
     it "should accept already closed line" do
@@ -47,7 +47,7 @@ describe GeoRuby::SimpleFeatures::LinearRing do
   end
 
   it "should close linear rings parsed from ekb" do
-    ewkb_polygon = GeoRuby::SimpleFeatures::Geometry.from_ewkb(polygon("(0 0,1 1)").as_ewkb)
+    ewkb_polygon = GeoRuby::SimpleFeatures::Geometry.from_ewkb(polygon("(0 0,1 1,0 0)").as_ewkb)
     ewkb_polygon.rings.first.should be_closed
   end
 
