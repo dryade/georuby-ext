@@ -29,13 +29,11 @@ describe GeoRuby::SimpleFeatures::Point do
   end
 
   describe "to_rgeo" do
-    it "should create a RGeo::Geos::FFIPointImpl" do
-      subject.to_rgeo.should be_instance_of(RGeo::Geos::FFIPointImpl)
-    end 
 
     it "should have the same information" do
       subject.to_rgeo.should have_same(:x, :y, :srid).than(subject)
     end
+
   end
 
   describe ".centroid" do

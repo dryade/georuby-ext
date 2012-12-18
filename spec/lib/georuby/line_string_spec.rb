@@ -5,9 +5,6 @@ describe GeoRuby::SimpleFeatures::LineString do
   subject { line_string "0 0,1 1,0 0" }
 
   describe "#to_rgeo" do
-    it "should create a RGeo::Geos::FFILineStringImpl geometry" do
-      subject.to_rgeo.should be_kind_of(RGeo::Geos::FFILineStringImpl)
-    end
 
     context "returned RGeo LineString" do
       it "should have the same srid" do

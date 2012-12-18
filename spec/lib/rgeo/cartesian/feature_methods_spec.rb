@@ -1,9 +1,9 @@
 require "spec_helper"
 
 module RGeo
-  module Geos
+  module Cartesian
 
-    describe FFIPointImpl do
+    describe PointImpl do
       
       subject { rgeo_point }
       
@@ -21,7 +21,7 @@ module RGeo
       
     end
     
-    describe FFILineStringImpl do
+    describe LineStringImpl do
       
       subject { rgeometry("LINESTRING(0 0, 1 1, 2 2)") }
       
@@ -47,7 +47,7 @@ module RGeo
       
     end
     
-    # describe RGeo::Geos::FFILinearRingImpl do
+    # describe RGeo::Geos::LinearRingImpl do
 
     #   subject { rgeometry("LINEARRING(0 0, 1 1, 0 0)") }
     
@@ -65,7 +65,7 @@ module RGeo
     
     # end
     
-    describe FFIPolygonImpl do
+    describe PolygonImpl do
       
       subject { rgeometry("POLYGON((0 0, 0 1, 1 1, 1 0, 0 0))") }
       
@@ -88,7 +88,7 @@ module RGeo
       
     end
 
-    describe FFIMultiPolygonImpl do
+    describe MultiPolygonImpl do
       
       subject { rgeometry("MULTIPOLYGON ( ((0 0, 0 1, 1 1, 1 0, 0 0), (0.25 0.25,0 0.75,0.75 0.75,0.75 0.25, 0.25 0.25)), ((15 5, 40 10, 10 20, 5 10, 15 5)) )") }
       
