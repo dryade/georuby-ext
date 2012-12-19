@@ -14,5 +14,5 @@ matrix:
       jdk: oraclejdk7
 before_install:
   - sudo apt-get update
-  - sudo apt-get install libproj-dev libgeos-dev libgeos-3.3.3 libffi-dev libsparsehash-dev
+  - sudo apt-get install libproj-dev libgeos-dev libffi-dev libsparsehash-dev
 script: "rake spec"
