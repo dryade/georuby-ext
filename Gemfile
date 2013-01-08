@@ -4,7 +4,7 @@ source "http://rubygems.org"
 gemspec
 
 group :development do
-  gem 'rb-inotify', :require => RUBY_PLATFORM.include?('linux') && 'rb-inotify'
-  gem 'libnotify', :require => RUBY_PLATFORM.include?('linux') && 'libnotify'
-  gem 'rb-fsevent', :require => RUBY_PLATFORM.include?('darwin') && 'rb-fsevent'
+  gem 'rb-inotify', ">= 0.8.8", :require => RUBY_PLATFORM.include?('linux') && 'rb-inotify'
+  gem 'libnotify', ">= 0.8.0", :require => RUBY_PLATFORM.include?('linux') && 'libnotify'
+  gem 'rb-fsevent', ">= 0.9.3", :require => RUBY_PLATFORM.include?('darwin') && 'rb-fsevent'
 end

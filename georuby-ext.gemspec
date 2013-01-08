@@ -17,18 +17,18 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake"
-  s.add_development_dependency "guard", "1.3.3"  
+  s.add_development_dependency "guard", ">= 1.3.3"  
   s.add_development_dependency "guard-rspec"      
   s.add_development_dependency "guard-bundler"
 
-  s.add_runtime_dependency "georuby", "1.9.8"  
-  s.add_runtime_dependency "dbf"
-  s.add_runtime_dependency "nokogiri"      
-  s.add_runtime_dependency "geokit"
-  s.add_runtime_dependency "rgeo", "0.3.20"  
-  s.add_runtime_dependency "json_pure"
-  s.add_runtime_dependency "ffi-geos", "~> 0.1.0" 
-  s.add_runtime_dependency "dr-ffi-proj4", "0.0.1" 
+  s.add_dependency "georuby", "1.9.8"  
+  s.add_dependency "dbf"
+  s.add_dependency "nokogiri"      
+  s.add_dependency "geokit"
+  s.add_dependency "rgeo", "0.3.20"  
+  s.add_dependency "json_pure"
+  s.add_dependency "ffi-geos", ">= 0.1.0" 
+  s.add_dependency "dr-ffi-proj4", "0.0.1" 
 
-  s.add_runtime_dependency "activesupport"
+  s.add_dependency "activesupport"
 end
