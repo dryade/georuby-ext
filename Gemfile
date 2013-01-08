@@ -4,8 +4,7 @@ source "http://rubygems.org"
 gemspec
 
 group :development do
-  group :linux do
-    gem 'rb-inotify'
-    gem 'libnotify'
-  end
+  gem 'rb-inotify', :require => RUBY_PLATFORM.include?('linux') && 'rb-inotify'
+  gem 'libnotify', :require => RUBY_PLATFORM.include?('linux') && 'libnotify'
+  gem 'rb-fsevent', :require => RUBY_PLATFORM.include?('darwin') && 'rb-fsevent'
 end
