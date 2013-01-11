@@ -15,7 +15,11 @@ module RGeo
           GeoRuby::SimpleFeatures::Geometry.from_geometry collect(&:to_georuby), srid
         end      
         
-      end    
+      end
+
+      def to_geometry
+        self
+      end
       
     end 
     
@@ -28,6 +32,10 @@ module RGeo
         else
           GeoRuby::SimpleFeatures::GeometryCollection.from_geometries collect(&:to_georuby), srid
         end
+      end
+
+      def to_geometry
+        self
       end
     end 
 
