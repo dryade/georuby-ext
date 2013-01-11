@@ -147,7 +147,7 @@ module RGeo
         extend ActiveSupport::Memoizable
         include Math
 
-        attr_reader :target, :segment
+        attr_reader :target, :segment, :factory
         delegate :departure, :arrival, :to => :segment
         
         def initialize(target, segment_or_departure, arrival = nil)
@@ -158,7 +158,7 @@ module RGeo
               segment_or_departure
             end
           @target = target
-
+          @factory = departure.factory
           raise "Target is not defined" unless target
         end
 
@@ -172,7 +172,7 @@ module RGeo
         end
 
         def target_distance_from_segment
-          target.distance(rgeo_factory.line_string([rgeo_factory.point(segment.departure.x, segment.departure.y), rgeo_factory.point(segment.arrival.x,segment.arrival.y) ]))
+          target.distance(factory.line_string([segment.departure, segment.arrival]))
         end
 
       end
