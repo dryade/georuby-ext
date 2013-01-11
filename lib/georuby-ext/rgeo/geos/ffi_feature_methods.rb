@@ -162,9 +162,13 @@ module RGeo
           raise "Target is not defined" unless target
         end
 
+        def distance_on_segment          
+          Math.sqrt( target_distance_from_departure**2 - target_distance_from_segment**2 )
+        end
+
         def distance_from_segment
           return 0 if [segment.departure, segment.arrival].include?(target)          
-          Math.sqrt( target_distance_from_departure**2 - target_distance_from_segment**2 )
+          target_distance_from_segment
         end
 
         def target_distance_from_departure
