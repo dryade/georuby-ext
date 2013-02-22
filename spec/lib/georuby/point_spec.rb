@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GeoRuby::SimpleFeatures::Point do
 
-  subject { point 1, 2 }
+  subject { point 1.0, 2.0 }
 
   describe "#==" do
 

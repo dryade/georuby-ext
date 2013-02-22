@@ -84,7 +84,7 @@ describe GeoRuby::SimpleFeatures::Polygon do
   end
   
   describe "centroid" do
-    let(:georuby_polygon){ polygon(point(0,0), point(0,2), point(2,2), point(2,0), point(0,0))}      
+    let(:georuby_polygon){ geometry("POLYGON((0 0, 0 2, 2 2, 2 0, 0 0))") }      
     
     it "should return centroid for a polygon" do
       georuby_polygon.centroid.should == point(1,1)

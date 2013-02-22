@@ -65,11 +65,11 @@ module RGeo
     end
 
     describe RGeo::Geos::FFILineStringImpl::Segment do
-      subject { RGeo::Geos::FFILineStringImpl::Segment.new(rgeo_point(0, 1), rgeo_point(0, 2)) }
+      subject { RGeo::Geos::FFILineStringImpl::Segment.new(rgeo_point(0, 1.0), rgeo_point(0, 2.0)) }
 
       before :each do 
         subject.stub :line_distance_at_departure => 1
-        subject.stub :line => rgeometry("LINESTRING(0 0, 0 1, 0 2)")
+        subject.stub :line => rgeometry("LINESTRING(0 0, 0 1.0, 0 2.0)")
       end
       
       describe "#line_distance_at_arrival" do
@@ -94,8 +94,8 @@ module RGeo
     describe RGeo::Geos::FFILineStringImpl::PointLocator do
 
       let(:departure) { rgeo_point(0, 0) }
-      let(:arrival) { rgeo_point(2, 0) }
-      let(:point_on_segment) { rgeo_point(1, 0) }
+      let(:arrival) { rgeo_point(2.0, 0) }
+      let(:point_on_segment) { rgeo_point(1.0, 0) }
       
       def locator(target, departure, arrival)
         RGeo::Geos::FFILineStringImpl::PointLocator.new target, departure, arrival
@@ -107,12 +107,28 @@ module RGeo
           locator(departure, departure, arrival).distance_from_segment.should be_zero
         end
 
-        it "should be 1 if target is on the middle of the segment" do
-          locator(point_on_segment, departure, arrival).distance_from_segment.should == 1.0
+        it "should be 0 if target is on the middle of the segment" do
+          locator(point_on_segment, departure, arrival).distance_from_segment.should == 0
         end
 
         it "should be 1 if target is on the x axis of the middle of the segment" do
-          locator(rgeo_point(1,1), departure, arrival).distance_from_segment.should be_within(0.01).of(1.0)
+          locator(rgeo_point(1.0,1.0), departure, arrival).distance_from_segment.should be_within(0.01).of(1.0)
+        end
+        
+      end
+
+      describe "distance_on_segment" do
+
+        it "should be zero if target is the departure" do
+          locator(departure, departure, arrival).distance_on_segment.should be_zero
+        end
+
+        it "should be 1 if target is on the middle of the segment" do
+          locator(point_on_segment, departure, arrival).distance_on_segment.should == 1.0
+        end
+
+        it "should be 1 if target is on the x axis of the middle of the segment" do
+          locator(rgeo_point(1.0,1.0), departure, arrival).distance_on_segment.should be_within(0.01).of(1.0)
         end
 
       end

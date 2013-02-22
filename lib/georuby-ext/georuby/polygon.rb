@@ -23,9 +23,7 @@ class GeoRuby::SimpleFeatures::Polygon
   end
   
   def centroid
-    if rgeo_polygon = to_rgeo
-      rgeo_polygon.centroid.to_georuby
-    end
+    to_rgeo.centroid.to_georuby
   end
 
   def self.union(georuby_polygons)
