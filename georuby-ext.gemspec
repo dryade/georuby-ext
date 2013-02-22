@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.name        = "georuby-ext"
   s.version     = "0.0.2"
   s.authors     = ["Marc Florisson", "Luc Donnet", "Alban Peignier"]
-  s.email       = ["marc@dryade.net", "luc@dryade.net", "alban@dryade.net"]
+  s.email       = ["mflorisson@cityway.fr", "ldonnet@cityway.fr", "alban.peignier@af83.com"]
   s.homepage    = "http://github.com/dryade/georuby-ext"
   s.summary     = %q{Extension to Ruby geometry libraries}
   s.description = %q{Use together GeoRuby, rgeo, geokit, proj4j (and others)}
