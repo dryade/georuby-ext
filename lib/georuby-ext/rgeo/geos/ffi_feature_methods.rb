@@ -113,7 +113,6 @@ module RGeo
         attr_reader :departure, :arrival
         
         def initialize(departure, arrival)
-          puts departure.inspect
           @departure, @arrival = departure, arrival
         end
 
