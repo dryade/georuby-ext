@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "georuby", "1.9.8"  
   s.add_dependency "dbf"
-  s.add_dependency "nokogiri"      
+  s.add_dependency "nokogiri", "1.5.10"      
   s.add_dependency "geokit"
   s.add_dependency "rgeo", "0.3.20"  
   s.add_dependency "json_pure"
