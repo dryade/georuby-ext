@@ -72,7 +72,7 @@ def multi_polygon(*polygons)
 end
 
 def rgeo_factory
-  @rgeo_factory ||= RGeo::Geos.factory(:srid => 4326, :wkt_parser => {:support_ewkt => true})
+  @rgeo_factory ||= RGeo::Geos.factory(:srid => 4326, :native_interface => :ffi, :wkt_parser => {:support_ewkt => true})
 end
 
 def rgeo_point(x = 0, y = 0, srid = 4326)
