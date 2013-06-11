@@ -1,5 +1,10 @@
 module RGeo
   module Geos
+
+    def preferred_native_interface
+      :ffi
+    end
+
     module FFIGeometryMethods
       
       def to_georuby
