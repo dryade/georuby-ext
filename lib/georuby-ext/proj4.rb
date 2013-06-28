@@ -17,7 +17,11 @@ class Proj4::Projection
     when 900913
       google
     else
-      raise "Unsupported srid: #{srid}"
+      begin 
+        Proj4::Projection.new 'init=epsg:'+srid.to_s
+      rescue
+        raise "Unsupported srid: #{srid}"
+      end
     end
   end
 

@@ -12,6 +12,10 @@ describe Proj4::Projection do
       Proj4::Projection.for_srid(900913).should == Proj4::Projection.google
     end
 
+    it "should return built projection projection for srid 27572" do
+      Proj4::Projection.for_srid(27572).definition.include?('epsg:27572').should be_true
+    end
+
     it "should raise an error when srid isn't supported" do
       lambda do
         Proj4::Projection.for_srid(123)
