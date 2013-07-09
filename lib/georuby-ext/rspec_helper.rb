@@ -34,7 +34,7 @@ end
 
 def line_string(*points)
   if points.one? and String === points.first
-    geometry("LINESTRING(#{points})")
+    geometry("LINESTRING(#{points.join(",")})")
   else
     GeoRuby::SimpleFeatures::LineString.from_points(points, points.first.srid)
   end
@@ -42,7 +42,7 @@ end
 
 def multi_line_string(*lines)
   if lines.one? and String === lines.first
-    geometry("MULTILINESTRING(#{lines})")
+    geometry("MULTILINESTRING(#{lines.join(",")})")
   else
     GeoRuby::SimpleFeatures::MultiLineString.from_line_strings lines, lines.first.srid
   end
@@ -61,7 +61,7 @@ end
 
 def polygon(*points)
   if points.one? and String === points.first
-    geometry("POLYGON(#{points})")
+    geometry("POLYGON(#{points.join(",")})")
   else
     GeoRuby::SimpleFeatures::Polygon.from_points([points], points.first.srid)
   end
