@@ -114,8 +114,8 @@ describe GeoRuby::SimpleFeatures::Polygon do
     end
 
     it "should return 2 polygons which have no intersection" do
-      result =  geometry("MULTIPOLYGON( ((0 0, 0 2, 2 2, 2 0, 0 0)), ((3 3, 4 3, 4 4, 3 4, 3 3)) )")
-      georuby_polygon2 = geometry("POLYGON((3 3, 4 3, 4 4, 3 4, 3 3))")
+      result =  geometry("MULTIPOLYGON( ((0 0, 0 2, 2 2, 2 0, 0 0)), ((3 3, 3 4, 4 4, 4 3, 3 3)) )")
+      georuby_polygon2 = geometry("POLYGON((3 3, 3 4, 4 4, 4 3, 3 3))")
       GeoRuby::SimpleFeatures::Polygon.union([georuby_polygon, georuby_polygon2]).should == result
     end
     
