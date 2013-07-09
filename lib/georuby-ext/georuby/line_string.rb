@@ -1,5 +1,11 @@
 class GeoRuby::SimpleFeatures::LineString
 
+  def is_closed
+        #a bit naive...
+      points.first == points.last
+  end
+  alias :closed? :is_closed
+
   def change(options)
     self.class.from_points(options[:points] || points, 
                            options[:srid] || srid,
