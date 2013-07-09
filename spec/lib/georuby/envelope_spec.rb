@@ -24,7 +24,7 @@ describe GeoRuby::SimpleFeatures::Envelope do
   describe ".bounds" do
 
     it "should return a global bounds of children" do      
-      geometries = [polygon("(0 0,1 1,1 0, 0 0)"), polygon("(1 1,2 2,2 0, 1 1)")] 
+      geometries = [polygon("(0 0,1 1,1 0, 0 0)"), polygon("(1 1,2 2,2 0, 1 1)")]
       GeoRuby::SimpleFeatures::Envelope.bounds(geometries).should == envelope("0 0","2 2")
     end                
   end

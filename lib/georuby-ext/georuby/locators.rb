@@ -161,7 +161,6 @@ class GeoRuby::SimpleFeatures::LineString
   end
 
   class PointLocator
-    extend ActiveSupport::Memoizable
     include Math
 
     attr_reader :target, :segment
@@ -206,7 +205,6 @@ class GeoRuby::SimpleFeatures::LineString
       departure_target_metric_delta[0]*departure_arrival_metric_delta[0] +
         departure_target_metric_delta[1]*departure_arrival_metric_delta[1]
     end
-    memoize :scalar_product
 
     def angle
       acos cos_angle
@@ -223,7 +221,6 @@ class GeoRuby::SimpleFeatures::LineString
     def square_of_segment_distance
       segment_distance ** 2
     end
-    memoize :square_of_segment_distance
 
     def segment_distance
       segment.distance

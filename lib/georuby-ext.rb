@@ -7,7 +7,6 @@ require 'active_support/core_ext/enumerable'
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/object/blank'
 require 'active_support/deprecation'
-require 'active_support/memoizable'
 
 require 'georuby-ext/core_ext'
 
