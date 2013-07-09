@@ -157,7 +157,6 @@ module RGeo
       end
 
       class PointLocator
-        extend ActiveSupport::Memoizable
         include Math
 
         attr_reader :target, :segment, :factory
