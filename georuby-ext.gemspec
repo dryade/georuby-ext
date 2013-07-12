@@ -30,5 +30,5 @@ Gem::Specification.new do |s|
   s.add_dependency "ffi-geos", "0.1.1" 
   s.add_dependency "dr-ffi-proj4", "0.0.1" 
 
-  s.add_dependency "activesupport"
+  s.add_dependency "activesupport", "<= 3.2.13"
 end
