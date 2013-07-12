@@ -12,4 +12,8 @@ class GeoRuby::SimpleFeatures::LinearRing
     alias_method_chain :from_coordinates, :close_support
   end
 
+  def to_rgeo
+    rgeo_factory.linear_ring(points.collect(&:to_rgeo))
+  end
+
 end
