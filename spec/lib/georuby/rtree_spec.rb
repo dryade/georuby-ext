@@ -118,15 +118,15 @@ describe GeoRuby::Rtree::Node do
                
   end
 
-  describe "#containing" do
-    bound = envelope("0 0","1 1")
-    let(:children) { [ polygon("(0 0,0 1,1 1,1 0,0 0)"), polygon("(0 0,0 2,2 2,2 0,0 0)"), polygon("(0 0,0 0.5,0.5 0.5,0.5 0,0 0)") ] }
+  # describe "#containing" do
+  #   bound = envelope("0 0","1 1")
+  #   let(:children) { [ polygon("(0 0,0 1,1 1,1 0,0 0)"), polygon("(0 0,0 2,2 2,2 0,0 0)"), polygon("(0 0,0 0.5,0.5 0.5,0.5 0,0 0)") ] }
     
-    it "should return elements if containing bounds" do
-      GeoRuby::Rtree::Node.new(children).containing(bound).should == children
-    end
+  #   it "should return elements if containing bounds" do
+  #     GeoRuby::Rtree::Node.new(children).containing(bound).should == children
+  #   end
                
-  end
+  # end
 
 
 end

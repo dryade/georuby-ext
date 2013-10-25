@@ -6,7 +6,7 @@ describe GeoRuby::SimpleFeatures::Point do
 
   describe "#==" do
 
-    let(:other) { mock :other, :lat => nil, :lng => nil }
+    let(:other) { double :other, :lat => nil, :lng => nil }
     
     it "should return false if other is nil" do
       subject.should_not == nil
@@ -162,7 +162,7 @@ describe GeoRuby::SimpleFeatures::Point do
 
   describe "#projection" do
 
-    let(:projection) { mock :projection }
+    let(:projection) { double :projection }
     
     it "should return projection associated to srid" do
       Proj4::Projection.should_receive(:for_srid).with(subject.srid).and_return(projection)

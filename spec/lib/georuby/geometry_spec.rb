@@ -50,7 +50,7 @@ describe GeoRuby::SimpleFeatures::Geometry do
 
   describe "#to_wgs84" do
 
-    let(:projected_geometry) { mock }
+    let(:projected_geometry) { double }
 
     it "should return a geometry with 4326 srid" do
       subject.to_wgs84.srid.should == 4326
@@ -65,7 +65,7 @@ describe GeoRuby::SimpleFeatures::Geometry do
 
   describe "#to_google" do
 
-    let(:projected_geometry) { mock }
+    let(:projected_geometry) { double }
 
     it "should return a geometry with 900913 srid" do
       subject.to_google.srid.should == 900913
