@@ -1,16 +1,10 @@
-== Georuby-ext [![Build Status](https://travis-ci.org/dryade/georuby-ext.png)](http://travis-ci.org/dryade/georuby-ext?branch=master) [![Dependency Status](https://gemnasium.com/dryade/georuby-ext.png)](https://gemnasium.com/dryade/georuby-ext) [![Code Climate](https://codeclimate.com/github/dryade/georuby-ext.png)](https://codeclimate.com/github/dryade/georuby-ext)
+# Georuby-ext [![Build Status](https://travis-ci.org/dryade/georuby-ext.png)](http://travis-ci.org/dryade/georuby-ext?branch=master) [![Dependency Status](https://gemnasium.com/dryade/georuby-ext.png)](https://gemnasium.com/dryade/georuby-ext) [![Code Climate](https://codeclimate.com/github/dryade/georuby-ext.png)](https://codeclimate.com/github/dryade/georuby-ext)
 
-Georuby-ext is an extension to Ruby geometry libraries : 
+Georuby-ext allows to use ruby geometry libraries together. It includes : 
 - Rgeo
 - GeoRuby
 - Geokit
 - Proj4j
-
-It allows to <b>use them together</b>.
-
-=== License
-
-This project uses MIT-LICENSE.
 
 Requirements
 ------------
