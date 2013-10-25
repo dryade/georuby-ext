@@ -30,6 +30,10 @@ matrix:
 # TEMP: jdbc adapters don't seem to work with Rails 4 yet, as of 2013-02-27
     - rvm: jruby-19mode
       gemfile: travis/ar40.gemfile
+      jdk: openjdk7
+    - rvm: jruby-19mode
+      gemfile: travis/ar40.gemfile
+      jdk: oraclejdk7
 # END TEMP
 before_install:
   - sudo apt-get update
