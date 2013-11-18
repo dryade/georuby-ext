@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency "geokit"
   s.add_dependency "rgeo", ">=0.3.20"
   s.add_dependency "ffi-geos", ">=0.1.1" 
-  s.add_dependency "dr-ffi-proj4", ">=0.0.1" 
+  s.add_dependency "dr-ffi-proj4", ">=0.0.3" 
 
-  s.add_dependency "activesupport", ">= 3.2.13"
+  s.add_dependency "activesupport", ">= 3.2.6"
 end
