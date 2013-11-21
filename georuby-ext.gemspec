@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "georuby-ext"
-  s.version     = "0.0.3"
+  s.version     = "0.0.4"
   s.authors     = ["Marc Florisson", "Luc Donnet", "Alban Peignier"]
   s.email       = ["mflorisson@cityway.fr", "ldonnet@cityway.fr", "alban@tryphon.eu"]
   s.homepage    = "http://github.com/dryade/georuby-ext"
