@@ -12,7 +12,17 @@ gemfile:
   - travis/ar40.gemfile
 matrix:
   exclude:
+    - rvm: 2.0.0
+      gemfile: travis/ar32.gemfile
+      jdk: openjdk7
+    - rvm: 2.0.0
+      gemfile: travis/ar40.gemfile
+      jdk: openjdk7
     - rvm: 1.9.3
+      gemfile: travis/ar32.gemfile
+      jdk: openjdk7
+    - rvm: 1.9.3
+      gemfile: travis/ar40.gemfile
       jdk: openjdk7
     - rvm: jruby-18mode
       gemfile: travis/ar40.gemfile
