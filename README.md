@@ -10,10 +10,9 @@ Requirements
 ------------
  
 This code has been run and tested on [Travis](http://travis-ci.org/afimb/chouette2?branch=master) with : 
-* Ruby 1.8.7
 * Ruby 1.9.3
 * Ruby 2.0
-* JRuby 1.7.2 with oraclejdk7, openjdk7, openjdk6
+* JRuby 1.7.2 (jruby-18mode, jruby-19mode) with oraclejdk7, openjdk7, openjdk6
 
 External Deps
 -------------
